@@ -28,6 +28,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/blueprint.css">
 <link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/journey.css">
 </head>
 <body>
 
@@ -91,177 +92,292 @@
     </div>
   </section>
 
-  <!-- Detail 01: comparison ---------------------------------------------- -->
-  <section class="section" id="compare" aria-labelledby="lifecycle">
+  <!-- Detail 01: the journey ---------------------------------------------- -->
+  <section class="section" id="journey" aria-labelledby="journey-h">
     <span class="section-mark reveal">01</span>
     <div class="head reveal">
-      <span class="anno anno-faint">Detail 01 &nbsp;/&nbsp; Comparison</span>
-      <h2 id="lifecycle">With us, and without</h2>
+      <span class="anno anno-faint">Detail 01 &nbsp;/&nbsp; The run</span>
+      <h2 id="journey-h">How we build value from waste</h2>
       <p class="lede" style="margin-top:16px">
-        The same three phases, run two ways. On the left is what happens to most of the
-        world's plastic. On the right is what happens to ours.
+        Follow one bottle down the sheet. At every phase the path forks. One branch
+        dead-ends, the other keeps building. The difference between them is the company.
       </p>
     </div>
 
-    <!-- Phase 01 -->
-    <div class="cmp-phase reveal">
-      <div class="cmp-phase-head">
-        <span class="cmp-phase-num">Phase 01</span>
-        <h3 class="cmp-phase-name">Collection</h3>
-        <hr class="foldline">
+    <div class="jrn">
+
+      <div class="jrn-start reveal">
+        <img src="assets/logos/bb-mascot.png" alt="" aria-hidden="true">
+        <span class="anno">One bottle enters the loop</span>
       </div>
 
-      <div class="cmp">
-        <div class="cmp-side cmp-without">
-          <div class="lc-photo"><img src="assets/photos/site-3.jpg" alt="" aria-hidden="true"></div>
-          <span class="stamp stamp-rust cmp-stamp">Without us</span>
-          <div class="lc-body">
-            <h4 class="lc-title">Burned or buried</h4>
-            <p class="lc-text">
-              Plastic that nobody collects goes to landfill or is burned in the open. Open
-              burning releases millions of tons of CO2 every year, plus the dioxins and
-              particulates breathed by whoever lives nearest to it.
-            </p>
-            <p class="lc-text">
-              Even where waste is collected by traditional recycling organisations, it moves
-              through middlemen who set the buying price and keep the margin. The people doing
-              the collecting are informal pickers, often impoverished women and children, and
-              they absorb the difference.
-            </p>
-          </div>
+      <!-- PHASE 01 ------------------------------------------------------- -->
+      <article class="phase" id="phase-1" data-phase>
+        <div class="phase-head">
+          <span class="phase-num">Phase 01</span>
+          <h3 class="phase-name">Collection</h3>
+          <hr class="foldline">
         </div>
 
-        <div class="cmp-side cmp-with">
-          <div class="lc-photo"><img src="assets/photos/community.jpg" alt="" aria-hidden="true"></div>
-          <span class="stamp stamp-growth cmp-stamp">With us</span>
-          <div class="lc-body">
-            <h4 class="lc-title">Booked and paid direct</h4>
-            <p class="lc-text">
-              Households, schools and businesses book a pickup in the
-              <a href="https://greenco1.web.app/" target="_blank" rel="noopener">GREENCO app</a>
-              and are paid directly for what they hand over. No middleman stands between the
-              person who collected the plastic and the facility that processes it.
-            </p>
-            <ul class="lc-facts">
-              <li>Green Agents earn income on the ground as collectors</li>
-              <li>Schools and community groups collect as a programme</li>
-              <li>The payment reaches the person who did the work</li>
-            </ul>
+        <div class="phase-body">
+          <div class="phase-grid">
+
+            <div class="branch branch-dead">
+              <div class="bcard bcard-dead">
+                <span class="stamp stamp-rust bcard-stamp">Dead end</span>
+                <span class="bcard-tag">Never collected</span>
+                <h4 class="bcard-title">Burned in the open</h4>
+                <div class="dead-draw" aria-hidden="true">
+                  <svg viewBox="0 0 200 92" class="dline">
+                    <path d="M14 76 Q42 54 68 76 Q94 56 120 76 Q146 52 174 76 L188 76"/>
+                    <path d="M92 62 Q84 44 98 30 Q102 44 111 37 Q119 51 107 62 Z"/>
+                    <path d="M124 30 Q133 22 126 13 Q120 6 129 0"/>
+                    <path d="M148 36 Q157 27 150 18"/>
+                    <path d="M70 34 Q78 26 72 18"/>
+                  </svg>
+                </div>
+                <p>
+                  Plastic that nobody collects is burned in the open or left to landfill.
+                  Burning plastic waste releases roughly 400 million tons of CO2 every year,
+                  along with the dioxins and particulates breathed by whoever lives nearest
+                  to it.
+                </p>
+                <span class="dead-cap"><b>&#10005;</b> Gone, and counted as emissions</span>
+              </div>
+
+              <div class="bcard bcard-dead">
+                <span class="stamp stamp-rust bcard-stamp">Dead end</span>
+                <span class="bcard-tag">Collected, but not by us</span>
+                <h4 class="bcard-title">The middleman takes it</h4>
+                <p>
+                  Collected without GREENCO, plastic moves through middlemen who put informal
+                  waste pickers to work, pay them unfairly and keep a high margin on what
+                  those pickers gathered. The material moves. The value does not reach the
+                  people who did the work.
+                </p>
+                <span class="dead-cap"><b>&#10005;</b> Value captured before it starts</span>
+              </div>
+            </div>
+
+            <div class="axis" aria-hidden="true">
+              <span class="axis-rail"></span>
+              <span class="axis-arm axis-arm-left"></span>
+              <span class="axis-arm axis-arm-right"></span>
+              <span class="axis-node">01</span>
+            </div>
+
+            <div class="branch branch-live">
+              <div class="bcard bcard-live">
+                <span class="bcard-tag">With Bottle Builders</span>
+                <h4 class="bcard-title">Booked, collected, paid direct</h4>
+                <div class="plate bcard-plate" data-autobuild>
+                  <img src="assets/photos/community.jpg" alt="Green Agents collecting plastic from a community" decoding="sync">
+                </div>
+                <p>
+                  <a href="https://greenco1.web.app/" target="_blank" rel="noopener">GREENCO</a>
+                  bypasses middlemen entirely. It connects waste generators straight to paid
+                  Green Agents who come and collect, so the money reaches the person who did
+                  the work rather than whoever stood in between.
+                </p>
+                <p>
+                  Households, schools and businesses book a pickup. A Green Agent fills the
+                  order in their own vehicle and earns from it.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <a class="phase-next" href="#phase-2" data-next>
+            <span class="phase-next-text">
+              <b>The plastic reaches a facility</b>
+              <span>So what happens inside?</span>
+            </span>
+            <span class="phase-next-arrow" aria-hidden="true">&#8595;</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- PHASE 02 ------------------------------------------------------- -->
+      <article class="phase" id="phase-2" data-phase>
+        <div class="phase-head">
+          <span class="phase-num">Phase 02</span>
+          <h3 class="phase-name">Processing</h3>
+          <hr class="foldline">
+        </div>
+
+        <div class="phase-body">
+          <div class="phase-grid">
+
+            <div class="branch branch-dead">
+              <div class="bcard bcard-dead">
+                <span class="stamp stamp-rust bcard-stamp">Rejected</span>
+                <span class="bcard-tag">Sorted by eye</span>
+                <h4 class="bcard-title">The bale is contaminated</h4>
+                <div class="dead-draw" aria-hidden="true">
+                  <svg viewBox="0 0 200 92" class="dline">
+                    <path d="M56 28 L108 14 L152 30 L152 70 L100 84 L56 68 Z"/>
+                    <path d="M56 28 L100 44 L152 30 M100 44 L100 84"/>
+                    <circle cx="80" cy="48" r="3.5"/>
+                    <circle cx="122" cy="54" r="3.5"/>
+                    <circle cx="98" cy="66" r="3.5"/>
+                    <path d="M164 22 L186 44 M186 22 L164 44"/>
+                  </svg>
+                </div>
+                <p>
+                  Sorting is done by hand. Once a bottle is crushed and its label is gone,
+                  PET, PVC and HDPE look nearly identical, so misidentified polymer ends up
+                  in the wrong bale. Food residue and multilayer packaging contaminate the rest.
+                </p>
+                <p>
+                  Nothing about the batch is written down, so when a bale is downgraded there
+                  is no way to trace which day, which source or which line caused it. The same
+                  fault repeats.
+                </p>
+                <span class="dead-cap"><b>&#10005;</b> Downgraded or rejected outright</span>
+              </div>
+            </div>
+
+            <div class="axis" aria-hidden="true">
+              <span class="axis-rail"></span>
+              <span class="axis-arm axis-arm-left"></span>
+              <span class="axis-arm axis-arm-right"></span>
+              <span class="axis-node">02</span>
+            </div>
+
+            <div class="branch branch-live">
+              <div class="bcard bcard-live">
+                <span class="bcard-tag">With Bottle Builders</span>
+                <h4 class="bcard-title">Every batch on record</h4>
+                <div class="plate bcard-plate" data-autobuild>
+                  <img src="assets/photos/shredder.jpg" alt="The shredder turning bottles into flake" decoding="sync">
+                </div>
+                <p>
+                  KATAROS logs intake, inventory, production and dispatch in real time, and it
+                  is implemented in our system and in partner EZOV Environmental Services'.
+                </p>
+                <p>
+                  When a batch underperforms we trace it back to the day it arrived, the source
+                  that sent it and the line that ran it. That record is what makes a formulation
+                  repeatable instead of lucky.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <a class="phase-next" href="#phase-3" data-next>
+            <span class="phase-next-text">
+              <b>Clean material, fully traced</b>
+              <span>Now it has to become something</span>
+            </span>
+            <span class="phase-next-arrow" aria-hidden="true">&#8595;</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- PHASE 03 ------------------------------------------------------- -->
+      <article class="phase" id="phase-3" data-phase>
+        <div class="phase-head">
+          <span class="phase-num">Phase 03</span>
+          <h3 class="phase-name">Value creation</h3>
+          <hr class="foldline">
+        </div>
+
+        <div class="phase-body">
+          <div class="phase-grid">
+
+            <div class="branch branch-dead">
+              <div class="bcard bcard-dead">
+                <span class="stamp stamp-rust bcard-stamp">Stops here</span>
+                <span class="bcard-tag">Sold on as pellets</span>
+                <h4 class="bcard-title">Valorization ends at the pellet</h4>
+                <div class="dead-draw" aria-hidden="true">
+                  <svg viewBox="0 0 200 92" class="dline">
+                    <path d="M36 74 Q68 48 100 74 Q132 50 164 74"/>
+                    <circle cx="70" cy="63" r="5"/>
+                    <circle cx="90" cy="59" r="5"/>
+                    <circle cx="110" cy="61" r="5"/>
+                    <circle cx="130" cy="66" r="5"/>
+                    <path d="M40 28 L118 28"/>
+                    <path d="M110 21 L118 28 L110 35"/>
+                    <path d="M138 17 L162 41 M162 17 L138 41"/>
+                  </svg>
+                </div>
+                <p>
+                  Most recycling organisations stop at flake or pellet and sell it on. For a
+                  great deal of that material, valorization ends right there. The plastic waste
+                  marketplace is inefficient, so recycled output often never reaches a buyer who
+                  turns it into anything.
+                </p>
+                <p>
+                  It gets stockpiled, downgraded or discarded after all the work of collecting
+                  and cleaning it, and the recycler takes whatever the commodity price allows
+                  that month.
+                </p>
+                <span class="dead-cap"><b>&#10005;</b> Recycled, but never valorized</span>
+              </div>
+            </div>
+
+            <div class="axis" aria-hidden="true">
+              <span class="axis-rail"></span>
+              <span class="axis-arm axis-arm-left"></span>
+              <span class="axis-arm axis-arm-right"></span>
+              <span class="axis-node">03</span>
+            </div>
+
+            <div class="branch branch-live">
+              <div class="bcard bcard-live">
+                <span class="bcard-tag">With Bottle Builders</span>
+                <h4 class="bcard-title">Built into products</h4>
+                <div class="plate bcard-plate" data-autobuild>
+                  <img src="assets/photos/cmu-dry.jpg" alt="Concrete masonry units cast with recycled PET flake" decoding="sync">
+                </div>
+                <p>
+                  We carry the material all the way to a finished product, so it never waits on
+                  somebody else to give it worth. Recycled flake and plant biomass ash go into
+                  concrete masonry units made in house.
+                </p>
+                <p>
+                  Blocks are where we start, not where we stop. The same feedstock supports a
+                  widening range of value-added products as the line grows.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </article>
+
+      <!-- The end of the run --------------------------------------------- -->
+      <div class="jrn-end" id="jrn-end">
+        <img class="mascot" src="assets/logos/bb-mascot.png" alt="" aria-hidden="true">
+        <h3>The loop closes</h3>
+        <p>
+          The bottle that would have been burned is now load-bearing. Every step it passed
+          through paid somebody, and the value stayed with the people who made it.
+        </p>
+
+        <div class="jrn-products">
+          <div class="jrn-product">
+            <b>Masonry units</b>
+            <span>Blocks strengthened with recycled flake</span>
+          </div>
+          <div class="jrn-product">
+            <b>Pavement</b>
+            <span>Paving and building materials</span>
+          </div>
+          <div class="jrn-product">
+            <b>Feedstock</b>
+            <span>Flake, bales and pellets to industry</span>
+          </div>
+          <div class="jrn-product is-next">
+            <b>And onward</b>
+            <span>Further value-added products as the line grows</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Phase 02 -->
-    <div class="cmp-phase reveal">
-      <div class="cmp-phase-head">
-        <span class="cmp-phase-num">Phase 02</span>
-        <h3 class="cmp-phase-name">Processing</h3>
-        <hr class="foldline">
-      </div>
-
-      <div class="cmp">
-        <div class="cmp-side cmp-without">
-          <div class="lc-photo"><img src="assets/photos/site-2.jpg" alt="" aria-hidden="true"></div>
-          <span class="stamp stamp-rust cmp-stamp">Without us</span>
-          <div class="lc-body">
-            <h4 class="lc-title">Sorted by eye</h4>
-            <p class="lc-text">
-              Sorting is done by hand. Once a bottle is crushed and its label is gone, PET,
-              PVC and HDPE look nearly identical, so misidentified polymer ends up in the
-              wrong bale. Food residue, adhesives and multilayer packaging contaminate the rest.
-            </p>
-            <p class="lc-text">
-              A contaminated bale is downgraded or rejected outright. Because nothing about the
-              batch is written down, there is no way to trace which day, which source or which
-              line the fault came from, so the same fault repeats.
-            </p>
-            <ul class="lc-facts">
-              <li>Hand sorting cannot reliably separate PET from PVC</li>
-              <li>Moisture is rarely measured before baling</li>
-              <li>No batch records, so faults cannot be traced back</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="cmp-side cmp-with">
-          <div class="lc-photo"><img src="assets/photos/shredder.jpg" alt="" aria-hidden="true"></div>
-          <span class="stamp stamp-growth cmp-stamp">With us</span>
-          <div class="lc-body">
-            <h4 class="lc-title">Every batch on record</h4>
-            <p class="lc-text">
-              KATAROS logs intake, inventory, production and dispatch in real time across both
-              our own facility and partner EZOV Environmental Services.
-            </p>
-            <p class="lc-text">
-              When a batch underperforms we trace it back to the day it arrived, the source
-              that sent it and the line that ran it. That record is what makes a formulation
-              repeatable instead of lucky.
-            </p>
-            <ul class="lc-facts">
-              <li>KATAROS is implemented in our system and in EZOV's</li>
-              <li>Intake through to dispatch tracked as one chain</li>
-              <li>Faults traceable to batch, day and source</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Phase 03 -->
-    <div class="cmp-phase reveal">
-      <div class="cmp-phase-head">
-        <span class="cmp-phase-num">Phase 03</span>
-        <h3 class="cmp-phase-name">Value creation</h3>
-        <hr class="foldline">
-      </div>
-
-      <div class="cmp">
-        <div class="cmp-side cmp-without">
-          <div class="lc-photo"><img src="assets/photos/site-1.jpg" alt="" aria-hidden="true"></div>
-          <span class="stamp stamp-rust cmp-stamp">Without us</span>
-          <div class="lc-body">
-            <h4 class="lc-title">Sold on as pellets</h4>
-            <p class="lc-text">
-              Most recycling organisations stop at flake or pellet and sell it on. Everything
-              the material is eventually worth is added by whoever buys it and turns it into a
-              product.
-            </p>
-            <p class="lc-text">
-              That leaves the recycler holding a raw commodity, taking whatever price the
-              market sets that month and waiting on manufacturers to decide what the output
-              is worth.
-            </p>
-            <ul class="lc-facts">
-              <li>The margin sits downstream with the manufacturer</li>
-              <li>Revenue tracks a volatile commodity price</li>
-              <li>No finished product of your own to price</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="cmp-side cmp-with">
-          <div class="lc-photo"><img src="assets/photos/cmu-dry.jpg" alt="" aria-hidden="true"></div>
-          <span class="stamp stamp-growth cmp-stamp">With us</span>
-          <div class="lc-body">
-            <h4 class="lc-title">Built into blocks</h4>
-            <p class="lc-text">
-              We carry the material all the way to a finished product. Recycled PET flake and
-              plant biomass ash go into concrete masonry units made in house.
-            </p>
-            <p class="lc-text">
-              Blending recycled flake and biomass ash into the aggregate raises the
-              compressive strength of the block. Taking that formulation to certified
-              structural grade is what the plant is working on now.
-            </p>
-            <ul class="lc-facts">
-              <li>Blocks, pavement and building materials, priced on cement cost</li>
-              <li>Flake, bales and pellets also sold to industrial buyers</li>
-              <li>The value added stays with the people who made it</li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 

@@ -1,0 +1,409 @@
+/* ==========================================================================
+   BOTTLE BUILDERS - The journey (Sheet A-02, Detail 01)
+
+   One bottle travels down the sheet. At each phase the drawn path forks: the
+   left branch dead-ends and gets stamped, the right branch keeps building.
+   Phases stage in as you reach them, so you read one fork at a time.
+   ========================================================================== */
+
+.jrn { position: relative; }
+
+/* --- Opening: the bottle enters the drawing ------------------------------ */
+
+.jrn-start {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 18px;
+}
+.jrn-start img {
+  width: clamp(58px, 6vw, 78px);
+  filter: drop-shadow(0 6px 14px rgba(13,46,76,0.22));
+  animation: jrn-bob 3.2s ease-in-out infinite;
+}
+@keyframes jrn-bob {
+  0%, 100% { transform: translateY(0)    rotate(-2deg); }
+  50%      { transform: translateY(-8px) rotate(2deg); }
+}
+.jrn-start .anno {
+  margin-top: 12px;
+  padding: 6px 12px;
+  border: var(--hair) solid var(--ink-faint);
+  background: rgba(255,255,255,0.4);
+  color: var(--ink);
+}
+
+/* --- A phase ------------------------------------------------------------- */
+
+.phase {
+  position: relative;
+  padding: clamp(26px, 4vw, 48px) 0 0;
+}
+
+/* Each phase holds the fold, so one fork is read at a time. */
+.phase-body { min-height: min(78svh, 620px); }
+
+.phase-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.phase-head .foldline { flex: 1; }
+.phase-num {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  flex: none;
+}
+.phase-name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.6vw, 2.3rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin: 0;
+  flex: none;
+}
+
+/* --- The fork ------------------------------------------------------------ */
+
+.phase-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 104px minmax(0, 1fr);
+  align-items: start;
+}
+
+/* Centre column: the spine, the fork node and the two arms */
+.axis { position: relative; align-self: stretch; min-height: 100%; }
+
+.axis-rail {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: -1px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--ink);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.85s var(--ease);
+}
+
+.axis-node {
+  position: absolute;
+  left: 50%;
+  top: 54px;
+  width: 46px; height: 46px;
+  margin-left: -23px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--sheet);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--ink);
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.6, 0.5, 1);
+}
+
+.axis-arm {
+  position: absolute;
+  top: 76px;
+  height: 2px;
+  width: 29px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease);
+}
+.axis-arm-left  { right: 50%; margin-right: 23px; transform-origin: right; }
+.axis-arm-right { left: 50%;  margin-left: 23px;  transform-origin: left; }
+.axis-arm-left  { background: var(--rust); }
+.axis-arm-right { background: var(--growth); }
+
+/* --- Branches ------------------------------------------------------------ */
+
+.branch { display: flex; flex-direction: column; gap: 14px; }
+.branch-dead { padding-right: 6px; }
+.branch-live { padding-left: 6px; }
+
+.bcard {
+  position: relative;
+  padding: clamp(18px, 2.2vw, 26px);
+  border: var(--hair) solid var(--ink);
+}
+
+/* The path that never got built: hatched, unresolved. */
+.bcard-dead {
+  background:
+    repeating-linear-gradient(135deg,
+      rgba(166, 61, 35, 0.11) 0 11px, transparent 11px 22px),
+    var(--sheet-deep);
+  border-color: var(--rust);
+  border-style: dashed;
+}
+.bcard-dead .bcard-title { color: var(--rust); }
+
+/* The completed path. */
+.bcard-live {
+  background: var(--sheet-pale);
+  border-color: var(--growth);
+  box-shadow: 5px 5px 0 rgba(31, 122, 76, 0.16);
+}
+.bcard-live .bcard-title { color: var(--growth); }
+
+.bcard-tag {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-bottom: 12px;
+  border: var(--hair) solid currentColor;
+  background: rgba(255,255,255,0.6);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.bcard-dead .bcard-tag { color: var(--rust); }
+.bcard-live .bcard-tag { color: var(--growth); }
+
+.bcard-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 1.9vw, 1.7rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  margin: 0 0 11px;
+}
+.bcard p { font-size: 0.92rem; line-height: 1.56; margin: 0 0 10px; max-width: 46ch; }
+.bcard p:last-child { margin-bottom: 0; }
+.bcard a { color: var(--growth); font-weight: 600; text-underline-offset: 3px; }
+
+/* Evidence: a photographic plate set into the drawing.
+
+   Note for future edits: do not animate opacity or transform on .bcard. Doing
+   so promotes the card to its own compositing layer, and the <img> inside then
+   never paints into it. The drawn axis carries the motion instead, which reads
+   better anyway. */
+.bcard-plate {
+  margin: 0 0 14px;
+  aspect-ratio: 16 / 7;
+  background: var(--sheet-deep);
+  filter: grayscale(1) sepia(1) hue-rotate(178deg) saturate(3.4) brightness(0.95) contrast(1.05);
+  transition: filter 1.1s var(--ease);
+}
+.bcard-plate::after { opacity: 0; }
+.bcard-plate img { mix-blend-mode: normal; filter: none; }
+
+/* The live branch develops into full colour once it is in view. The dead
+   branch never does: it stays a drawing of something that did not happen. */
+.bcard-live .bcard-plate.is-built { filter: none; }
+
+/* The dead branch is drawn, never photographed. We have no honest photograph
+   of open burning or a rejected bale, and using a picture of our own crew
+   collecting would caption good work as failure. So the outcome we prevent
+   exists only as linework, which also sharpens the drawn-versus-built idea. */
+.dead-draw { margin: 2px 0 16px; padding: 6px 0; }
+.dead-draw svg {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  overflow: visible;
+}
+.dline path,
+.dline circle {
+  fill: none;
+  stroke: var(--rust);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  transition: stroke-dashoffset 1.5s var(--ease);
+}
+.phase.is-live .dline path,
+.phase.is-live .dline circle { stroke-dashoffset: 0; transition-delay: 0.75s; }
+
+.bcard-stamp {
+  position: absolute;
+  top: 14px; right: 14px;
+  z-index: 2;
+  opacity: 0;
+  transform: rotate(-5deg) scale(1.4);
+  transition: opacity 0.3s var(--ease), transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+/* Dead-end cap on the failed branch */
+.dead-cap {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  padding: 7px 12px;
+  border: var(--hair) dashed var(--rust);
+  color: var(--rust);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.dead-cap b {
+  display: grid;
+  place-items: center;
+  width: 17px; height: 17px;
+  border: var(--hair) solid var(--rust);
+  border-radius: 50%;
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+/* --- Staged reveal ------------------------------------------------------- */
+
+.phase.is-live .axis-rail { transform: scaleY(1); }
+.phase.is-live .axis-node { transform: scale(1); transition-delay: 0.45s; }
+.phase.is-live .axis-arm  { transform: scaleX(1); transition-delay: 0.7s; }
+
+.phase.is-live .bcard-stamp { opacity: 0.85; transform: rotate(-5deg) scale(1); transition-delay: 1.35s; }
+
+/* --- Prompt to the next stage ------------------------------------------- */
+
+.phase-next {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  max-width: 100%;
+  margin: clamp(26px, 3.4vw, 42px) auto 0;
+  padding: 13px 20px;
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255,255,255,0.55);
+  border: var(--hair) solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(13,46,76,0.16);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease),
+              box-shadow 0.18s var(--ease), background 0.2s var(--ease);
+  cursor: pointer;
+}
+.phase.is-live .phase-next { opacity: 1; transform: none; transition-delay: 1.6s; }
+.phase-next:hover { background: var(--chalk); box-shadow: 2px 2px 0 rgba(13,46,76,0.16); transform: translate(2px, 2px); }
+
+.phase-next-text { display: flex; flex-direction: column; gap: 3px; }
+.phase-next-text b {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.phase-next-text span {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.phase-next-arrow {
+  flex: none;
+  width: 34px; height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--hardhat);
+  border: var(--hair) solid var(--ink);
+  font-size: 1rem;
+  line-height: 1;
+  animation: nudge 2s ease-in-out infinite;
+}
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+
+/* --- The end of the run -------------------------------------------------- */
+
+.jrn-end {
+  position: relative;
+  margin-top: clamp(24px, 3vw, 40px);
+  padding: clamp(22px, 3vw, 34px);
+  border: 2px solid var(--growth);
+  background: var(--sheet-pale);
+  box-shadow: 7px 7px 0 rgba(31, 122, 76, 0.16);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.jrn-end.is-live { opacity: 1; transform: none; }
+.jrn-end img.mascot { width: 66px; margin: 0 auto 14px; }
+.jrn-end h3 { color: var(--growth); margin-bottom: 10px; }
+.jrn-end p { margin: 0 auto; color: var(--ink); max-width: 54ch; }
+
+.jrn-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 1px;
+  margin-top: 22px;
+  border: var(--hair) solid rgba(31, 122, 76, 0.4);
+}
+.jrn-product {
+  padding: 13px 12px;
+  background: rgba(255,255,255,0.4);
+  border-right: var(--hair) solid rgba(31, 122, 76, 0.3);
+}
+.jrn-product:last-child { border-right: 0; }
+.jrn-product b {
+  display: block;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.02rem;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.jrn-product span { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.35; }
+.jrn-product.is-next { background: rgba(245, 180, 23, 0.16); }
+
+/* --- Phones: same journey, one column, tap to advance -------------------- */
+
+@media (max-width: 860px) {
+  .phase-grid { grid-template-columns: 34px minmax(0, 1fr); }
+  .phase-body { min-height: 0; }
+
+  /* The spine moves to the left margin and both branches hang off it. */
+  .axis { grid-row: 1 / span 2; grid-column: 1; }
+  .axis-node { top: 18px; left: 17px; width: 34px; height: 34px; margin-left: -17px; font-size: 0.58rem; }
+  .axis-arm { display: none; }
+
+  .branch-dead { grid-column: 2; grid-row: 1; padding: 0 0 14px 14px; }
+  .branch-live { grid-column: 2; grid-row: 2; padding: 0 0 0 14px; }
+
+  .bcard { padding: 16px; }
+  .bcard-title { font-size: 1.2rem; }
+  .bcard p { font-size: 0.88rem; }
+  .bcard-plate { aspect-ratio: 16 / 9; }
+
+  .phase-head { flex-wrap: wrap; }
+  .phase-head .foldline { display: none; }
+
+  .phase-next { width: 100%; justify-content: space-between; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jrn-start img, .phase-next-arrow { animation: none; }
+  .axis-rail { transform: scaleY(1); }
+  .axis-node { transform: scale(1); }
+  .axis-arm  { transform: scaleX(1); }
+  .bcard, .phase-next, .jrn-end { opacity: 1; transform: none; }
+  .bcard-stamp { opacity: 0.85; transform: rotate(-5deg); }
+  .dline path, .dline circle { stroke-dashoffset: 0; }
+}

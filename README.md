@@ -23,8 +23,9 @@ Any static server works. There is nothing to compile.
 | File | What it holds |
 | --- | --- |
 | `css/blueprint.css` | The design system: colour, type, sheet frame, title block, dimension lines, cyanotype plates, buttons |
-| `css/components.css` | Page pieces: hero, lifecycle drag panel, team roster, contact form, GREENCO card |
-| `js/site.js` | Loading sheet, navigation, scroll reveal, count-up, the lifecycle drag panel |
+| `css/components.css` | Page pieces: hero, team roster, contact form, GREENCO card |
+| `css/journey.css` | The journey on Sheet A-02, loaded only by that page |
+| `js/site.js` | Loading sheet, navigation, scroll reveal, count-up, journey staging |
 | `js/enquiry.js` | Contact form submit, backed by Supabase |
 | `js/supabase-config.js` | Your Supabase URL and anon key |
 | `assets/` | Logos, photography, team headshots, block forming video |
@@ -43,10 +44,25 @@ every drafting annotation, dimension label and sheet number.
 you hover, or shortly after they scroll into view. That is the drawn to built
 idea, and it is why `.plate` uses blend modes rather than a filter alone.
 
-**The lifecycle panel.** On desktop it is a drag divider. On phones the drag is
-removed entirely and the two sides stack, because at 390px each half would be
-about 190px wide. The panel also sets `touch-action: pan-y` and captures pointer
-events on the handle only, so a vertical swipe always scrolls the page.
+**The journey (Sheet A-02).** One bottle travels down a drawn spine. At each of
+three phases the path forks: the left branch dead-ends and gets stamped, the
+right branch keeps building. Phases stage in as you reach them, and a prompt at
+the foot of each one leads to the next. On phones the spine moves to the left
+margin and the two branches stack, so there is never a horizontal gesture.
+
+Two things in there will bite you if you change them:
+
+- **Do not animate `opacity` or `transform` on `.bcard`.** It promotes the card
+  to its own compositing layer and the photograph inside then never paints. The
+  drawn axis carries the motion instead.
+- **Plate images use `decoding="sync"`, not `loading="lazy"`.** Lazily decoded
+  images finish after the filtered layer has rasterised, and nothing invalidates
+  it, so the photo stays blank until you scroll.
+
+**The dead branch is drawn, never photographed.** There is no honest photo of
+open burning or a rejected bale, and using a picture of our own crew collecting
+would caption good work as failure. The outcome we prevent exists only as
+linework.
 
 **No em dashes anywhere.** Deliberate. Keep it that way when editing copy.
 

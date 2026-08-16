@@ -142,6 +142,58 @@
     }
   }
 
+  /* --- The journey: stage each fork as it is reached ---------------------- */
+
+  var phases = document.querySelectorAll("[data-phase]");
+
+  if (phases.length) {
+    var jrnEnd = document.getElementById("jrn-end");
+
+    if (!("IntersectionObserver" in window) || reduced) {
+      Array.prototype.forEach.call(phases, function (p) { p.classList.add("is-live"); });
+      if (jrnEnd) jrnEnd.classList.add("is-live");
+    } else {
+      // Fires once the fork is properly in view, not the instant it clips the
+      // bottom edge, so the sequence is never half watched.
+      var stager = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-live");
+          stager.unobserve(entry.target);
+        });
+      }, { threshold: 0.2, rootMargin: "0px 0px -12% 0px" });
+
+      Array.prototype.forEach.call(phases, function (p) { stager.observe(p); });
+
+      if (jrnEnd) {
+        var endObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-live");
+            endObs.unobserve(entry.target);
+          });
+        }, { threshold: 0.3 });
+        endObs.observe(jrnEnd);
+      }
+    }
+
+    // Tap or click the prompt to travel to the next fork. This is the whole
+    // interaction on touch, where there is no hover to lean on.
+    Array.prototype.forEach.call(document.querySelectorAll("[data-next]"), function (link) {
+      link.addEventListener("click", function (e) {
+        var target = document.querySelector(link.getAttribute("href"));
+        if (!target) return;
+        e.preventDefault();
+
+        var top = target.getBoundingClientRect().top + window.scrollY - 84;
+        window.scrollTo({ top: top, behavior: reduced ? "auto" : "smooth" });
+
+        // Reveal immediately rather than waiting for the scroll to settle.
+        target.classList.add("is-live");
+      });
+    });
+  }
+
   /* --- Scroll position, drawn down the left edge of the sheet ------------- */
 
   var progress = document.querySelector(".progress");
