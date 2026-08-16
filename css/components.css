@@ -1,0 +1,475 @@
+/* ==========================================================================
+   BOTTLE BUILDERS - Page components
+   Hero, lifecycle comparison, team roster, contact, recycle handoff.
+   ========================================================================== */
+
+/* --- Hero (Sheet A-01) --------------------------------------------------- */
+
+.hero {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  padding: clamp(18px, 3vw, 40px) 0;
+}
+
+.hero-copy { position: relative; z-index: 2; }
+
+.hero h1 { margin-bottom: 4px; }
+
+.hero-lede { margin-top: 22px; }
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 30px; }
+
+/* Elevation drawing: the hero's right column. Photography set inside a
+   drawn frame with its own dimension annotations. */
+.elevation { position: relative; z-index: 1; }
+
+.elevation-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border: var(--hair) solid var(--ink);
+  padding: 11px;
+  background: rgba(255,255,255,0.13);
+}
+.elevation-frame .plate { width: 100%; height: 100%; }
+
+/* Extension lines running off the frame, as on a dimensioned elevation. */
+.elevation-frame::before,
+.elevation-frame::after {
+  content: "";
+  position: absolute;
+  background: var(--ink-faint);
+}
+.elevation-frame::before { top: -14px; left: 0; right: 0; height: var(--hair); }
+.elevation-frame::after  { top: 0; bottom: 0; left: -14px; width: var(--hair); }
+
+.elevation-tag {
+  position: absolute;
+  z-index: 3;
+  padding: 6px 10px;
+  background: var(--sheet);
+  border: var(--hair) solid var(--ink);
+}
+.elevation-tag.tl { top: -13px; left: 18px; }
+.elevation-tag.br { bottom: -13px; right: 18px; background: var(--hardhat); }
+
+/* Stands in the gutter beside the drawing, not on top of it. */
+.hero-mascot {
+  position: absolute;
+  right: 100%;
+  margin-right: 14px;
+  bottom: -14px;
+  width: clamp(78px, 9vw, 116px);
+  z-index: 4;
+}
+
+.hero-stats { margin-top: clamp(20px, 3vw, 34px); }
+
+/* --- Lifecycle comparison (Sheet A-02) ----------------------------------- */
+
+/* Static side by side comparison. The two paths sit next to each other so both
+   read at once, with the same drafting language on either side. */
+.cmp-phase { margin-bottom: clamp(26px, 3.4vw, 46px); }
+.cmp-phase:last-child { margin-bottom: 0; }
+
+.cmp-phase-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.cmp-phase-head .foldline { flex: 1; }
+.cmp-phase-num {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  flex: none;
+}
+.cmp-phase-name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin: 0;
+  flex: none;
+}
+
+.cmp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: var(--hair) solid var(--ink);
+}
+
+.cmp-side {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(52px, 5vw, 66px) clamp(18px, 2.4vw, 30px) clamp(20px, 2.6vw, 30px);
+}
+
+/* The path that was never built: hatched, unresolved. */
+.cmp-without {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(166, 61, 35, 0.10) 0 11px,
+      transparent 11px 22px
+    ),
+    var(--sheet-deep);
+  border-right: 2px solid var(--ink);
+}
+.cmp-without .lc-side-label { color: var(--rust); border-color: var(--rust); }
+.cmp-without .lc-title { color: var(--rust); }
+
+/* The completed path. */
+.cmp-with { background: var(--sheet-pale); }
+.cmp-with .lc-side-label { color: var(--growth); border-color: var(--growth); }
+.cmp-with .lc-title { color: var(--growth); }
+
+.lc-photo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.lc-photo img { width: 100%; height: 100%; object-fit: cover; }
+.cmp-without .lc-photo img { filter: grayscale(1) contrast(1.3) brightness(0.9); mix-blend-mode: luminosity; opacity: 0.2; }
+.cmp-with    .lc-photo img { filter: saturate(1.02); opacity: 0.26; }
+.lc-photo::after { content: ""; position: absolute; inset: 0; opacity: 0.68; }
+.cmp-with    .lc-photo::after { background: linear-gradient(180deg, transparent 8%, var(--sheet-pale) 78%); }
+.cmp-without .lc-photo::after { background: linear-gradient(180deg, transparent 8%, var(--sheet-deep) 78%); }
+
+.lc-body { position: relative; z-index: 1; }
+
+.lc-side-label {
+  display: inline-block;
+  padding: 6px 11px;
+  border: var(--hair) solid currentColor;
+  margin-bottom: 15px;
+  background: rgba(255,255,255,0.66);
+}
+.lc-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.3vw, 2.1rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin: 0 0 13px;
+}
+.lc-text { font-size: 0.93rem; line-height: 1.58; color: var(--ink); margin: 0 0 12px; }
+.lc-text:last-child { margin-bottom: 0; }
+.lc-text a { color: var(--growth); font-weight: 600; text-underline-offset: 3px; }
+
+.lc-facts { list-style: none; margin: 4px 0 0; padding: 0; }
+.lc-facts li {
+  position: relative;
+  padding-left: 19px;
+  margin-bottom: 6px;
+  font-size: 0.87rem;
+  line-height: 1.45;
+}
+.lc-facts li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.6em;
+  width: 9px; height: var(--hair);
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.cmp-stamp { position: absolute; top: clamp(16px, 2vw, 22px); left: clamp(18px, 2.4vw, 30px); z-index: 2; }
+
+/* --- Process strip ------------------------------------------------------- */
+
+.process {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  margin-top: 26px;
+  border: var(--hair) solid var(--ink-faint);
+}
+.process-step {
+  position: relative;
+  padding: 16px;
+  background: rgba(255,255,255,0.14);
+  border-right: var(--hair) solid var(--ink-faint);
+}
+.process-step:last-child { border-right: 0; }
+.process-step .anno { display: block; color: var(--ink-faint); margin-bottom: 8px; }
+.process-step h4 { margin-bottom: 7px; }
+.process-step p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+
+/* --- Team roster (Sheet A-03) -------------------------------------------- */
+
+.roster { display: grid; gap: 1px; grid-template-columns: repeat(auto-fit, minmax(228px, 1fr)); }
+
+.member {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.15);
+  border: var(--hair) solid var(--chalk-soft);
+  transition: background 0.3s var(--ease);
+}
+.member:hover { background: rgba(255,255,255,0.34); }
+
+.member .plate { aspect-ratio: 1 / 1; border: 0; border-bottom: var(--hair) solid var(--chalk-soft); }
+
+/* The portrait is a second route to the same profile. It lights up on hover
+   like every other plate, and clicking it there opens LinkedIn. */
+.member-shot { display: block; position: relative; }
+.member-shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--hardhat);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease);
+}
+.member-shot:hover::after { opacity: 1; }
+
+.member-body { padding: 15px 16px 17px; display: flex; flex-direction: column; flex: 1; }
+.member-role { color: var(--ink-faint); margin-bottom: 8px; display: block; }
+.member-name { font-size: 1.3rem; margin-bottom: 8px; }
+.member-name a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s var(--ease);
+}
+.member-name a:hover {
+  color: var(--hardhat-deep);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+.member-edu { font-size: 0.83rem; line-height: 1.45; color: var(--ink-soft); margin: 0 0 12px; }
+.member-note { font-size: 0.83rem; line-height: 1.45; color: var(--ink-soft); margin: 0 0 12px; }
+
+/* Nothing follows the bio now, so the card ends flush. */
+.member-body > :last-child { margin-bottom: 0; }
+
+.tier { margin-top: clamp(30px, 4vw, 52px); }
+.tier-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.tier-head .foldline { flex: 1; }
+
+.partner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 26px;
+  padding: 20px;
+  margin-top: 26px;
+  border: var(--hair) dashed var(--ink-faint);
+  background: rgba(255,255,255,0.13);
+}
+.partner-body { flex: 1 1 320px; }
+.partner h4 { margin-bottom: 7px; }
+.partner p { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+
+/* --- Contact (Sheet A-04) ------------------------------------------------ */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+  gap: clamp(24px, 4vw, 58px);
+  align-items: start;
+}
+
+.pillars { display: grid; gap: 1px; }
+.pillar {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: var(--hair) solid var(--ink-faint);
+}
+.pillar:first-child { border-top: var(--hair) solid var(--ink-faint); }
+.pillar h4 { margin-bottom: 7px; }
+.pillar p { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+
+.contact-card {
+  padding: clamp(20px, 3vw, 30px);
+  background: rgba(255,255,255,0.2);
+  border: var(--hair) solid var(--ink);
+  box-shadow: 6px 6px 0 rgba(13,46,76,0.14);
+}
+.contact-row {
+  padding: 14px 0;
+  border-bottom: var(--hair) solid var(--ink-faint);
+}
+.contact-row:last-of-type { border-bottom: 0; }
+.contact-row .anno { display: block; color: var(--ink-faint); margin-bottom: 6px; }
+.contact-row > a,
+.contact-row > span:not(.anno) {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: block;
+  word-break: break-word;
+}
+.contact-row a:hover { color: var(--hardhat-deep); }
+
+/* --- Enquiry form (drafting request block) ------------------------------- */
+
+.enquiry { margin-top: 22px; }
+.enquiry-grid { display: grid; gap: 1px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.field { display: flex; flex-direction: column; }
+.field.wide { grid-column: 1 / -1; }
+.field label { margin-bottom: 6px; color: var(--ink-faint); }
+
+.field input,
+.field select,
+.field textarea {
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--ink);
+  padding: 11px 12px;
+  background: rgba(255,255,255,0.42);
+  border: var(--hair) solid var(--ink-faint);
+  border-radius: 0;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: var(--chalk);
+}
+.field textarea { resize: vertical; min-height: 104px; }
+.field select { appearance: none; cursor: pointer; }
+
+.enquiry-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  margin-top: 18px;
+}
+
+#enquiry-status { margin: 0; font-size: 0.82rem; line-height: 1.45; max-width: 34ch; }
+#enquiry-status[data-state="idle"]  { color: var(--ink-faint); }
+#enquiry-status[data-state="busy"]  { color: var(--ink-soft); }
+#enquiry-status[data-state="ok"]    { color: var(--growth); font-weight: 600; }
+#enquiry-status[data-state="error"] { color: var(--rust); font-weight: 600; }
+
+@media (max-width: 520px) {
+  .enquiry-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Recycle handoff (Sheet A-05) ---------------------------------------- */
+
+.recycle {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+  gap: clamp(26px, 4vw, 62px);
+  align-items: center;
+}
+
+.greenco-card {
+  position: relative;
+  padding: clamp(20px, 3vw, 30px);
+  background: var(--ink);
+  color: var(--sheet-pale);
+  border: var(--hair) solid var(--ink);
+  box-shadow: 8px 8px 0 rgba(13,46,76,0.18);
+  text-decoration: none;
+  display: block;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.greenco-card:hover { transform: translate(3px, 3px); box-shadow: 4px 4px 0 rgba(13,46,76,0.18); }
+.greenco-card .anno { color: var(--hardhat); display: block; margin-bottom: 13px; }
+.greenco-card h3 { color: var(--chalk); margin-bottom: 11px; }
+.greenco-card p { color: rgba(255,255,255,0.76); font-size: 0.92rem; margin-bottom: 18px; }
+/* The app screen is a product shot, not photography, so it stays lit rather
+   than printing as a cyanotype plate. */
+.greenco-shot {
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  margin-bottom: 18px;
+  background: var(--sheet-pale);
+  border: var(--hair) solid rgba(255,255,255,0.32);
+  overflow: hidden;
+}
+.greenco-shot img {
+  max-height: 330px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.4s var(--ease);
+}
+.greenco-card:hover .greenco-shot img { transform: translateY(-5px) scale(1.02); }
+.greenco-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 21px;
+  background: var(--hardhat);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.steps { counter-reset: step; margin: 24px 0 0; padding: 0; list-style: none; }
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 20px 52px;
+  border-left: var(--hair) solid var(--ink-faint);
+  margin-left: 14px;
+}
+.steps li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.steps li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: -14px; top: -2px;
+  width: 28px; height: 28px;
+  display: grid;
+  place-items: center;
+  background: var(--sheet);
+  border: var(--hair) solid var(--ink);
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 0.63rem;
+  font-weight: 600;
+}
+.steps h4 { margin-bottom: 5px; }
+.steps p { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+
+/* --- Responsive ---------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+  .hero { grid-template-columns: 1fr; gap: 30px; }
+  .elevation { max-width: 420px; }
+  /* One column, so there is no gutter to stand in. */
+  .hero-mascot { right: -18px; margin-right: 0; bottom: -16px; }
+  .contact-grid,
+  .recycle { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  /* Two columns at phone width would be about 190px each, which is not a
+     comparison, it is two columns of broken sentences. The pair stacks
+     instead: without on top, with underneath. */
+  .cmp { grid-template-columns: 1fr; }
+  .cmp-without { border-right: 0; border-bottom: 2px solid var(--ink); }
+  .cmp-side { padding: 52px 20px 24px; }
+  .cmp-phase-head { flex-wrap: wrap; }
+  .cmp-phase-head .foldline { display: none; }
+  .lc-title { font-size: 1.5rem; }
+  .lc-text { font-size: 0.9rem; }
+  .hero-mascot { width: 70px; left: -8px; bottom: -12px; }
+}
