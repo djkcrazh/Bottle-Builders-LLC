@@ -177,8 +177,69 @@
       }
     }
 
-    // Tap or click the prompt to travel to the next fork. This is the whole
-    // interaction on touch, where there is no hover to lean on.
+    /* The bottle rides the spine ------------------------------------------ */
+
+    var run = document.querySelector(".jrn-run");
+    var track = document.querySelector(".jrn-track i");
+    var rider = document.querySelector(".jrn-rider");
+    var impact = document.querySelector(".jrn-impact");
+    var riding = false;
+
+    if (run && track && rider) {
+      var lastNode = -1;
+
+      var ride = function () {
+        var box = run.getBoundingClientRect();
+        var topDoc = box.top + window.scrollY;
+        var height = box.height;
+
+        // The bottle sits where the reader is looking, so descending the page
+        // and descending the spine are the same motion.
+        var anchor = window.scrollY + window.innerHeight * 0.5;
+        var p = (anchor - topDoc) / height;
+        p = Math.max(0, Math.min(1, p));
+
+        track.style.height = (p * 100).toFixed(2) + "%";
+        rider.style.top = (p * height).toFixed(1) + "px";
+
+        if (p > 0.001 && p < 0.999) {
+          rider.classList.add("is-riding");
+          riding = true;
+        } else if (p >= 0.999) {
+          rider.classList.add("is-riding");
+        } else {
+          rider.classList.remove("is-riding");
+        }
+
+        // A small hop each time it passes a fork, so the forks register as
+        // events rather than as scenery.
+        var node = Math.floor(p * 3);
+        if (riding && node !== lastNode && node > 0 && node < 3) {
+          rider.classList.remove("is-hopping");
+          void rider.offsetWidth;
+          rider.classList.add("is-hopping");
+        }
+        lastNode = node;
+      };
+
+      if (reduced) {
+        track.style.height = "100%";
+        rider.classList.add("is-riding");
+      } else {
+        var riderTicking = false;
+        var onRide = function () {
+          if (riderTicking) return;
+          riderTicking = true;
+          window.requestAnimationFrame(function () { ride(); riderTicking = false; });
+        };
+        window.addEventListener("scroll", onRide, { passive: true });
+        window.addEventListener("resize", onRide, { passive: true });
+        ride();
+      }
+    }
+
+    /* Travel to a fork. On touch this is the whole interaction, since there
+       is no hover to lean on. */
     Array.prototype.forEach.call(document.querySelectorAll("[data-next]"), function (link) {
       link.addEventListener("click", function (e) {
         var target = document.querySelector(link.getAttribute("href"));
@@ -187,9 +248,45 @@
 
         var top = target.getBoundingClientRect().top + window.scrollY - 84;
         window.scrollTo({ top: top, behavior: reduced ? "auto" : "smooth" });
-
-        // Reveal immediately rather than waiting for the scroll to settle.
         target.classList.add("is-live");
+
+        // Only the opening call to action launches the bottle. Between forks
+        // the rider is already on the spine and simply carries on.
+        if (reduced || !run || !rider || link.getAttribute("href") !== "#journey") return;
+
+        var from = link.getBoundingClientRect();
+        var runBox = run.getBoundingClientRect();
+        var landX = runBox.left + (window.innerWidth > 860 ? runBox.width / 2 : 17);
+        var landY = runBox.top + window.scrollY - top; // where the spine starts once scrolled
+
+        var flyer = document.createElement("img");
+        flyer.className = "jrn-flyer";
+        flyer.src = rider.getAttribute("src");
+        flyer.alt = "";
+        flyer.setAttribute("aria-hidden", "true");
+        flyer.style.left = (from.left + from.width / 2 - 27) + "px";
+        flyer.style.top = (from.top + from.height / 2 - 27) + "px";
+        document.body.appendChild(flyer);
+
+        var dx = landX - (from.left + from.width / 2);
+        var dy = landY - (from.top + from.height / 2);
+
+        var flight = flyer.animate([
+          { transform: "translate(0,0) rotate(-10deg) scale(0.85)", opacity: 0 },
+          { transform: "translate(" + (dx * 0.45) + "px," + (dy * 0.3) + "px) rotate(8deg) scale(1.12)", opacity: 1, offset: 0.45 },
+          { transform: "translate(" + dx + "px," + dy + "px) rotate(0deg) scale(1)", opacity: 1 }
+        ], { duration: 950, easing: "cubic-bezier(0.45, 0, 0.2, 1)", fill: "forwards" });
+
+        flight.onfinish = function () {
+          flyer.remove();
+          rider.classList.add("is-riding", "is-hopping");
+          if (impact) {
+            impact.style.top = rider.style.top || "0px";
+            impact.classList.remove("is-hit");
+            void impact.offsetWidth;
+            impact.classList.add("is-hit");
+          }
+        };
       });
     });
   }
