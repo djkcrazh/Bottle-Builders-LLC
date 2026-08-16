@@ -25,6 +25,7 @@ Any static server works. There is nothing to compile.
 | `css/blueprint.css` | The design system: colour, type, sheet frame, title block, dimension lines, cyanotype plates, buttons |
 | `css/components.css` | Page pieces: hero, team roster, contact form, GREENCO card |
 | `css/journey.css` | The journey on Sheet A-02, loaded only by that page |
+| `css/motion.css` | Polish layer: staggered reveals and hover states. Purely additive |
 | `js/site.js` | Loading sheet, navigation, scroll reveal, count-up, journey staging |
 | `js/enquiry.js` | Contact form submit, backed by Supabase |
 | `js/supabase-config.js` | Your Supabase URL and anon key |
@@ -63,6 +64,12 @@ Two things in there will bite you if you change them:
 open burning or a rejected bale, and using a picture of our own crew collecting
 would caption good work as failure. The outcome we prevent exists only as
 linework.
+
+**Hover states split in two.** Panels with no photograph inside lift on a
+transform. Panels holding a photographic plate lift with shadow and border
+only, because transforming them promotes the panel to its own compositing
+layer and the filtered image inside stops painting. `css/motion.css` says which
+is which; keep new components on the right side of that line.
 
 **No em dashes anywhere.** Deliberate. Keep it that way when editing copy.
 

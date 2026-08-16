@@ -13,8 +13,8 @@
 
   /* Drafting ink + reproduction line */
   --ink:          #0d2e4c;
-  --ink-soft:     #2b5378;
-  --ink-faint:    rgba(13, 46, 76, 0.42);
+  --ink-soft:     #21456c;
+  --ink-faint:    rgba(13, 46, 76, 0.58);
   --chalk:        #ffffff;
   --chalk-soft:   rgba(255, 255, 255, 0.62);
   --chalk-faint:  rgba(255, 255, 255, 0.24);
@@ -62,8 +62,8 @@ body {
   margin: 0;
   min-height: 100svh;
   font-family: var(--body);
-  font-size: clamp(15px, 1.02vw, 17px);
-  line-height: 1.62;
+  font-size: clamp(15.5px, 1.06vw, 17.5px);
+  line-height: 1.68;
   color: var(--ink);
   background-color: var(--sheet);
   background-image:
@@ -131,9 +131,9 @@ strong { font-weight: 700; }
 /* Drafting annotation: every label, tag and number on the sheet. */
 .anno {
   font-family: var(--mono);
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.19em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   line-height: 1.4;
 }
@@ -144,8 +144,8 @@ strong { font-weight: 700; }
 .anno-faint { color: var(--ink-faint); }
 
 .lede {
-  font-size: clamp(1.05rem, 1.42vw, 1.32rem);
-  line-height: 1.5;
+  font-size: clamp(1.08rem, 1.45vw, 1.34rem);
+  line-height: 1.58;
   color: var(--ink-soft);
   max-width: 46ch;
 }
@@ -570,7 +570,7 @@ strong { font-weight: 700; }
   margin-bottom: 9px;
 }
 .stat-num sup { font-size: 0.42em; vertical-align: super; margin-left: 2px; }
-.stat-label { display: block; color: var(--ink-soft); font-size: 0.8rem; line-height: 1.42; }
+.stat-label { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.5; }
 .stat-tag { display: block; margin-top: 8px; color: var(--ink-faint); }
 
 /* --- 10. Cards ----------------------------------------------------------- */
@@ -583,7 +583,7 @@ strong { font-weight: 700; }
 }
 .card h3 { margin-bottom: 10px; }
 .card .anno { color: var(--ink-faint); margin-bottom: 11px; display: block; }
-.card p { font-size: 0.93rem; color: var(--ink-soft); }
+.card p { font-size: 0.97rem; line-height: 1.6; color: var(--ink-soft); }
 
 .grid-3 { display: grid; gap: 1px; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); }
 

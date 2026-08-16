@@ -132,7 +132,8 @@
 .bcard-dead {
   background:
     repeating-linear-gradient(135deg,
-      rgba(166, 61, 35, 0.11) 0 11px, transparent 11px 22px),
+      rgba(166, 61, 35, 0.07) 0 11px, transparent 11px 22px),
+    rgba(255, 255, 255, 0.34),
     var(--sheet-deep);
   border-color: var(--rust);
   border-style: dashed;
@@ -147,17 +148,31 @@
 }
 .bcard-live .bcard-title { color: var(--growth); }
 
+/* Every box states plainly which world it belongs to. */
 .bcard-tag {
   display: inline-block;
-  padding: 5px 10px;
-  margin-bottom: 12px;
+  padding: 6px 11px;
   border: var(--hair) solid currentColor;
-  background: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.72);
   font-family: var(--mono);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
+}
+.bcard-dead .bcard-tag { background: rgba(166, 61, 35, 0.12); }
+.bcard-live .bcard-tag { background: rgba(31, 122, 76, 0.12); }
+
+/* The specific condition, secondary to the label above it. */
+.bcard-sub {
+  display: block;
+  margin: 9px 0 12px;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
 }
 .bcard-dead .bcard-tag { color: var(--rust); }
 .bcard-live .bcard-tag { color: var(--growth); }
@@ -170,7 +185,7 @@
   text-transform: uppercase;
   margin: 0 0 11px;
 }
-.bcard p { font-size: 0.92rem; line-height: 1.56; margin: 0 0 10px; max-width: 46ch; }
+.bcard p { font-size: 1rem; line-height: 1.62; margin: 0 0 12px; max-width: 44ch; color: var(--ink); }
 .bcard p:last-child { margin-bottom: 0; }
 .bcard a { color: var(--growth); font-weight: 600; text-underline-offset: 3px; }
 
@@ -337,7 +352,7 @@
 .jrn-end.is-live { opacity: 1; transform: none; }
 .jrn-end img.mascot { width: 66px; margin: 0 auto 14px; }
 .jrn-end h3 { color: var(--growth); margin-bottom: 10px; }
-.jrn-end p { margin: 0 auto; color: var(--ink); max-width: 54ch; }
+.jrn-end p { margin: 0 auto; color: var(--ink); max-width: 54ch; font-size: 1.02rem; line-height: 1.62; }
 
 .jrn-products {
   display: grid;
