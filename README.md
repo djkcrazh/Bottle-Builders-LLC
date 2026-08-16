@@ -112,19 +112,25 @@ differs:
 
 ### Clean URLs
 
-`cleanUrls` is deliberately off. Turning it on makes Vercel redirect
-`/about.html` to `/about`, which would leave every canonical tag and sitemap
-entry pointing at a redirect. To adopt clean URLs, change the internal links,
-the canonicals and the sitemap in the same pass.
+`cleanUrls` is on, so `/about` serves `about.html` and Vercel redirects
+`/about.html` to `/about`. This matches the URL structure of the old Wix site,
+so links already ranking in Google keep working with no redirect hop.
 
-## Editing content
+Internal links, canonical tags and the sitemap are all extensionless to match.
+If you add a page, link to it without the extension.
 
-Copy lives directly in the HTML. The things most likely to change:
+`vercel.json` also redirects the legacy Wix paths that do not map by name:
 
-- **Traction figures**: `index.html`, the `.stats` block. The count-up reads
-  `data-count`, so update both that attribute and the visible text.
-- **The 25,000 kg figure** is credited to partner EZOV Environmental Services in
-  three places: the home stat, the team page partner block, and Phase 02 of the
-  lifecycle. Keep the credit if you change the number.
-- **Team**: `team.html`. Core team and advisors are separate sections.
-- **Lifecycle copy**: `about.html`, inside each `[data-phase-panel]`.
+| Old | New |
+| --- | --- |
+| `/join` | `/contact` |
+| `/gallery` | `/` |
+| `/our-team` | `/team` |
+| `/about-us` | `/about` |
+| `/lets-recycle` | `/recycle` |
+
+## Local preview
+
+`python3 -m http.server` cannot serve extensionless URLs, so `serve.sh` runs
+`serve.py` instead. It mirrors Vercel: a path with no extension resolves to the
+matching `.html`, and anything unmatched gets `404.html` with a real 404 status.

@@ -3,7 +3,16 @@
   "framework": null,
   "buildCommand": null,
   "outputDirectory": ".",
+  "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/join", "destination": "/contact", "permanent": true },
+    { "source": "/gallery", "destination": "/", "permanent": true },
+    { "source": "/our-team", "destination": "/team", "permanent": true },
+    { "source": "/about-us", "destination": "/about", "permanent": true },
+    { "source": "/lets-recycle", "destination": "/recycle", "permanent": true },
+    { "source": "/let-s-recycle", "destination": "/recycle", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
