@@ -80,16 +80,42 @@ role key in this repo.
 
 Table editor, `enquiries`, sorted by `created_at`.
 
-## Hosting
+## Hosting: Vercel
 
-Supabase does not host static sites, so the pages need a separate host. Any of
-these serve this folder as is:
+Supabase does not host static sites, so the pages are served separately. The
+front end is hosted on Vercel, configured by `vercel.json`.
 
-- **Firebase Hosting**, which already serves GREENCO at `greenco1.web.app`
-- Netlify, Vercel, Cloudflare Pages, GitHub Pages
+There is **no build step**. Vercel serves this directory as static files.
 
-Point the host at this directory. There is no build command and no output
-directory.
+### First deploy
+
+1. [vercel.com/new](https://vercel.com/new), then import
+   `djkcrazh/Bottle-Builders-LLC` from GitHub.
+2. Framework Preset: **Other**. Leave Build Command empty and set Output
+   Directory to `.` (`vercel.json` already declares both, so the defaults
+   should already be correct).
+3. Deploy. Every push to `main` redeploys, and pull requests get their own
+   preview URL.
+
+### Custom domain
+
+Project Settings > Domains, add `bottlebuilders.com`, then point the registrar
+at the records Vercel shows.
+
+**After the domain is live, update the absolute URLs.** These are hardcoded to
+`https://bottlebuilders.com` and will break link previews if the real domain
+differs:
+
+- `og:url`, `og:image` and `twitter:image` in all five HTML files
+- `<link rel="canonical">` in all five HTML files
+- `robots.txt` and `sitemap.xml`
+
+### Clean URLs
+
+`cleanUrls` is deliberately off. Turning it on makes Vercel redirect
+`/about.html` to `/about`, which would leave every canonical tag and sitemap
+entry pointing at a redirect. To adopt clean URLs, change the internal links,
+the canonicals and the sitemap in the same pass.
 
 ## Editing content
 
