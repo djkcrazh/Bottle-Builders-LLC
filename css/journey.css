@@ -151,6 +151,8 @@
 /* Every box states plainly which world it belongs to. */
 .bcard-tag {
   display: inline-block;
+  /* The green cards have no sub-label under this, so the gap lives here. */
+  margin: 0 0 13px;
   padding: 6px 11px;
   border: var(--hair) solid currentColor;
   background: rgba(255,255,255,0.72);
@@ -166,7 +168,8 @@
 /* The specific condition, secondary to the label above it. */
 .bcard-sub {
   display: block;
-  margin: 9px 0 12px;
+  /* Tucks up under the tag so the red cards do not gain a double gap. */
+  margin: -4px 0 13px;
   font-family: var(--mono);
   font-size: 0.66rem;
   font-weight: 500;
