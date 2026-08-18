@@ -81,6 +81,12 @@ extensionless because the old Wix site ranked on extensionless URLs and
 **Link internally without the extension** (`href="/about"`). Canonical tags,
 `og:url` and `sitemap.xml` are all extensionless and must stay consistent.
 
+**Every absolute URL says `https://www.bottlebuilders.com`**, not the apex. The
+apex 301s to `www`, so naming the apex would make the site declare a canonical
+that redirects and send link previews through an extra hop. If the site ever
+moves to the apex for real, 28 strings across the six pages, `sitemap.xml` and
+`robots.txt` have to move with it.
+
 `vercel.json` also 301s legacy Wix slugs that do not map by name:
 `/join` to `/contact`, `/gallery` to `/`, plus `/our-team`, `/about-us`,
 `/lets-recycle`.
@@ -347,11 +353,6 @@ Check on each of `/`, `/about`, `/team`, `/contact`, `/recycle`:
    `meta name="description"`. The user asked to be reminded at ship time.
 2. **Formspree endpoint** into `js/form-config.js`.
 3. **Swap the domain** from the holding page project to this one on Vercel.
-4. **The absolute URLs point at the wrong host.** Every canonical tag,
-   `og:url`, and all five `sitemap.xml` entries say `https://bottlebuilders.com`.
-   The apex 301s to `www`, so the live address is
-   `https://www.bottlebuilders.com`. They must be changed to `www` before the
-   domain moves, or the site declares a canonical that redirects.
 
 Closed, and not to be reopened: the Team headline photo stays as it is, and the
 "Nearly 70%" figure stands as written.

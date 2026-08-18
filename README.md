@@ -123,16 +123,17 @@ There is **no build step**. Vercel serves this directory as static files.
 
 ### Custom domain
 
-Project Settings > Domains, add `bottlebuilders.com`, then point the registrar
-at the records Vercel shows.
+The site answers on `www.bottlebuilders.com`. The apex 301s to it.
 
-**After the domain is live, update the absolute URLs.** These are hardcoded to
-`https://bottlebuilders.com` and will break link previews if the real domain
-differs:
+Every absolute URL in the repo names `https://www.bottlebuilders.com`:
+`og:url`, `og:image` and `twitter:image` in all six pages, every
+`<link rel="canonical">`, `sitemap.xml` and `robots.txt`. They point at the
+address the site actually answers on, so a canonical never resolves through a
+redirect. Moving the site to a different host means moving all of them.
 
-- `og:url`, `og:image` and `twitter:image` in all five HTML files
-- `<link rel="canonical">` in all five HTML files
-- `robots.txt` and `sitemap.xml`
+Going live is a domain move between two Vercel projects, not a DNS change:
+remove `www.bottlebuilders.com` from the holding page project, add it to this
+one. The CNAME already points at Vercel.
 
 ### Clean URLs
 
