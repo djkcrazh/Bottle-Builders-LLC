@@ -1,0 +1,192 @@
+/* ==========================================================================
+   NOT FOUND (404)
+   Loaded only by 404.html, the way journey.css is loaded only by about.html.
+
+   The conceit: a sheet referenced in the drawing index that was never drawn.
+   The number is set as drawn linework rather than type, so the page reads as
+   part of the same drawing set rather than as a system error page.
+   ========================================================================== */
+
+.nf {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(28px, 5vw, 68px);
+  align-items: center;
+}
+
+/* The title block is docked bottom right of the viewport. On the long sheets
+   the footer already ends above it, so nothing reads underneath. This sheet is
+   short, so it has to earn that clearance deliberately: the heading is set
+   smaller than a normal sheet head and the index rows are tighter, which keeps
+   the whole page inside one screen with the bottom right corner left free. */
+.nf h1 {
+  font-size: clamp(2.2rem, 4.6vw, 3.9rem);
+  line-height: 0.94;
+}
+
+/* .section-open reserves a full fold for sheets that carry on below it. This
+   sheet has nothing below, so it takes only the height it needs. */
+.section-open:has(.nf) {
+  min-height: 0;
+  padding-bottom: clamp(30px, 4vw, 54px);
+}
+
+.nf .lede { margin-bottom: 20px; }
+.nf-heading { margin-top: 20px !important; }
+
+/* --- The drawn number --------------------------------------------------- */
+
+.nf-plate {
+  position: relative;
+  padding: clamp(18px, 3vw, 32px);
+  border: var(--hair) solid var(--ink-faint);
+  background: var(--sheet-deep);
+  /* The builder rocks on a loop. Without this his swing crosses the panel edge
+     and widens the document, which shows up as a horizontal scrollbar on a
+     phone. Clipping to the panel is the guarantee; the inset below is the fit. */
+  overflow: hidden;
+}
+
+/* Unbuilt ground: the hatch that means "nothing here yet" on a drawing. */
+.nf-plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 8px,
+    rgba(13, 46, 76, 0.07) 8px 9px
+  );
+  pointer-events: none;
+}
+
+.nf-digits { display: block; width: 100%; height: auto; overflow: visible; }
+
+.nf-digits .nf-ink {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 620;
+  stroke-dashoffset: 620;
+  animation: nf-draw 1.5s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+}
+
+.nf-digits .nf-ink:nth-of-type(2) { animation-delay: 0.34s; }
+.nf-digits .nf-ink:nth-of-type(3) { animation-delay: 0.68s; }
+
+/* The middle zero stays dashed. It is the sheet that was never drawn. */
+.nf-digits .nf-void {
+  fill: none;
+  stroke: var(--ink-faint);
+  stroke-width: 2.2;
+  stroke-dasharray: 9 8;
+  opacity: 0;
+  animation: nf-appear 0.5s ease 1.05s forwards;
+}
+
+/* Extension ticks, so the gap reads as a measured absence. */
+.nf-digits .nf-dim {
+  stroke: var(--ink-faint);
+  stroke-width: 1.2;
+  opacity: 0;
+  animation: nf-appear 0.5s ease 1.35s forwards;
+}
+
+@keyframes nf-draw   { to { stroke-dashoffset: 0; } }
+@keyframes nf-appear { to { opacity: 1; } }
+
+/* --- The builder ------------------------------------------------------- */
+
+.nf-builder {
+  position: absolute;
+  right: clamp(10px, 2vw, 26px);
+  bottom: 0;
+  width: clamp(78px, 11vw, 118px);
+  transform-origin: 50% 100%;
+  /* Three passes, then he settles. A permanent loop reads as a busy page and
+     costs battery on a phone for a joke the visitor has already got. */
+  animation: nf-search 3.6s ease-in-out 3 both;
+}
+
+/* He looks left, then right, then shrugs. He cannot find the sheet either. */
+@keyframes nf-search {
+  0%, 100% { transform: rotate(0deg)    translateY(0); }
+  22%      { transform: rotate(-7deg)   translateY(-4px); }
+  46%      { transform: rotate(6deg)    translateY(-4px); }
+  68%      { transform: rotate(-2deg)   translateY(-9px); }
+  84%      { transform: rotate(0deg)    translateY(0); }
+}
+
+/* --- The index of sheets that do exist ---------------------------------- */
+
+.nf-index {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  border-top: var(--hair) solid var(--ink-faint);
+}
+
+.nf-index li { border-bottom: var(--hair) solid var(--ink-faint); }
+
+.nf-index a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 14px;
+  padding: 9px 4px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 0.2s ease, padding-left 0.2s ease;
+}
+
+.nf-index a:hover,
+.nf-index a:focus-visible {
+  background: var(--sheet-pale);
+  padding-left: 12px;
+}
+
+.nf-index .nf-no {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+.nf-index .nf-name {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.04rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.nf-index .nf-go {
+  font-family: var(--mono);
+  color: var(--ink-faint);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nf-index a:hover .nf-go,
+.nf-index a:focus-visible .nf-go {
+  transform: translateX(4px);
+  color: var(--hardhat);
+}
+
+/* --- Responsive --------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  /* Drawing first on a phone. The 404 says what happened before any sentence
+     does, and it is the part worth seeing without scrolling. */
+  .nf { grid-template-columns: 1fr; gap: 26px; }
+  .nf-builder { width: 78px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-digits .nf-ink { stroke-dashoffset: 0; animation: none; }
+  .nf-digits .nf-void,
+  .nf-digits .nf-dim { opacity: 1; animation: none; }
+  .nf-builder { animation: none; }
+}

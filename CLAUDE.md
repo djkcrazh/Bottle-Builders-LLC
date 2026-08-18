@@ -43,6 +43,7 @@ the site folder.
 | Holding page, local | `~/Documents/Bottle Builders/BB Placeholder Site` |
 | Holding page, repo | `github.com/djkcrazh/bottle-builders-temporary` |
 | Source material | `~/Documents/BottleBuilders_VC_Pitch_Deck.pptx`, `~/Documents/Bottle Builders/` |
+| Photo library | `~/Documents/Bottle Builders/Bottle Builders LLC Website/Site Images/` |
 | Old Wix-era copy | `~/Documents/Bottle Builders/BBG Website/` (reference only, do not edit) |
 
 ### Current live state
@@ -74,7 +75,7 @@ extensionless because the old Wix site ranked on extensionless URLs and
 /team      team.html      Sheet A-03   Team
 /contact   contact.html   Sheet A-04   Contact
 /recycle   recycle.html   Sheet A-05   Recycle, hands off to GREENCO
-           404.html       branded not-found page
+           404.html       Sheet A-00   Not found, served with a real 404
 ```
 
 **Link internally without the extension** (`href="/about"`). Canonical tags,
@@ -240,6 +241,7 @@ sweeps, arrow slides and the focus ring.
 | `css/blueprint.css` | The system: tokens, type, sheet frame, nav, title block, dimension lines, plates, buttons, scroll scale |
 | `css/components.css` | Page pieces: hero, team roster, contact form, GREENCO card, process strip |
 | `css/journey.css` | The journey. Loaded only by `about.html` |
+| `css/notfound.css` | The not-found sheet. Loaded only by `404.html` |
 | `css/motion.css` | Polish layer, loaded everywhere, loaded last |
 | `js/site.js` | Loading sheet, nav, scroll reveal, plate build, count-up, journey staging and ride, scroll scale, title block |
 | `js/enquiry.js` | Contact form submit, ES module |
@@ -256,6 +258,13 @@ on `sessionStorage`.
 ## Content rules
 
 These are decisions the user made. Do not quietly revert them.
+
+**The block formulation is not public.** Rice husk and sugarcane bagasse were
+named on the About and Recycle sheets and have been removed, along with the
+Schedule of materials section and the Downstream section that carried them.
+Their photographs were deleted from `assets/photos/` as well, since Vercel
+serves that directory publicly. Say what goes in only as far as recycled
+plastic flakes. Do not reintroduce the inputs from the deck.
 
 **Metrics.** Only two traction figures may appear: **25,000+ kg per month** and
 **founded 2025**. Everything else was deliberately removed: the 15 GREENCO
@@ -329,19 +338,13 @@ Check on each of `/`, `/about`, `/team`, `/contact`, `/recycle`:
    `meta name="description"`. The user asked to be reminded at ship time.
 2. **Supabase keys** into `js/supabase-config.js`.
 3. **Swap the domain** from the holding page project to this one on Vercel.
-4. **Verify the CO2 claim.** The site says every kilogram of plastic burned
-   releases about three kilograms of CO2. That is chemically sound. But the same
-   card says 400 million tons is "discarded and improperly recycled" while the
-   Site Conditions section two screens down says roughly a tenth of that 400
-   million tons is recycled. Reconcile the two or accept the tension knowingly.
-5. **Gilbert's card label** reads "Construction advisor" above a bio naming him
-   CEO of Bottle Builders Ghana LTD. Either change the label or give him his own
-   tier.
-6. **Two images never arrived.** The user wanted a baled-plastic photo beside the
-   About headline and a crew photo with peace signs beside the Team headline.
-   Both were macOS temp screenshots that were deleted before they could be
-   copied. Currently standing in: `pet-bottles.jpg` on About, `crew.jpg` on Team.
-   Ask for them to be re-sent and saved somewhere permanent first.
+4. **The crew photo is available and not yet placed.** `IMG_2701.JPG` in the
+   photo library is the peace-sign crew shot wanted beside the Team headline.
+   `crew.jpg` is still standing in. The baled-plastic photo for the About
+   headline never arrived; `pet-bottles.jpg` stands in there.
+5. **Check the informal waste picker figure.** The card reads "Nearly 70%". It
+   previously read 64%, which looked sourced. Confirm where the number comes
+   from before launch.
 
 ---
 
