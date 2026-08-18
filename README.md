@@ -27,8 +27,8 @@ Any static server works. There is nothing to compile.
 | `css/journey.css` | The journey on Sheet A-02, loaded only by that page |
 | `css/motion.css` | Polish layer: staggered reveals and hover states. Purely additive |
 | `js/site.js` | Loading sheet, navigation, scroll reveal, count-up, journey staging |
-| `js/enquiry.js` | Contact form submit, backed by Supabase |
-| `js/supabase-config.js` | Your Supabase URL and anon key |
+| `js/enquiry.js` | Contact form submit, posted to Formspree |
+| `js/form-config.js` | The Formspree endpoint the contact form posts to |
 | `assets/` | Logos, photography, team headshots, block forming video |
 
 ### Design decisions worth knowing
@@ -73,35 +73,36 @@ is which; keep new components on the right side of that line.
 
 **No em dashes anywhere.** Deliberate. Keep it that way when editing copy.
 
-## Supabase
+## The contact form
 
-The contact form on Sheet A-04 writes to a `public.enquiries` table.
+Sheet A-04 posts to [Formspree](https://formspree.io), which emails each
+submission to the address on the Formspree account. There is no database and no
+server.
 
 ### Set it up
 
-1. Create a project at [supabase.com](https://supabase.com).
-2. Apply the schema:
-   ```bash
-   supabase link --project-ref YOUR-PROJECT-REF
-   supabase db push
-   ```
-   Or paste `supabase/migrations/0001_enquiries.sql` into the SQL editor.
-3. Copy your project URL and anon key from **Project Settings > API** into
-   `js/supabase-config.js`.
+1. Create a form at formspree.io and confirm the email it should deliver to.
+2. Copy the endpoint. It looks like `https://formspree.io/f/abcdwxyz`.
+3. Paste it into `js/form-config.js`.
 
-Until step 3 is done the form falls back to opening the visitor's email app, and
-says so in the interface. Nothing breaks.
+Until step 3 is done the form falls back to opening the visitor's email app.
+Nothing breaks and nothing is said about it in the interface.
 
-### Security
+### Why the endpoint is not a secret
 
-Row level security is on. The anon key can insert an enquiry and cannot read one
-back, so shipping it in the browser is fine. Read submissions in the Supabase
-dashboard, or from a server holding the service role key. Never put the service
-role key in this repo.
+A Formspree form ID is a public endpoint by design, the same way the mailto
+address in the footer is public. It is safe in the repo and safe in the browser.
+
+### Spam
+
+The form carries a hidden `_gotcha` field. People never see it, so anything in
+it came from a bot: the submit is dropped, the visitor is shown the ordinary
+success message, and nothing is sent. Formspree runs its own filtering on top.
 
 ### Reading submissions
 
-Table editor, `enquiries`, sorted by `created_at`.
+They arrive as email. The subject line carries what the sender picked in the
+"what do you want to do" menu, so they sort in an inbox without being opened.
 
 ## Hosting: Vercel
 

@@ -356,6 +356,22 @@
   margin-top: 18px;
 }
 
+/* The spam trap. display:none would let a bot skip it, so it is taken out of
+   the layout while staying a real, fillable field. aria-hidden on the wrapper
+   is what keeps it away from screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 #enquiry-status { margin: 0; font-size: 0.82rem; line-height: 1.45; max-width: 34ch; }
 #enquiry-status[data-state="idle"]  { color: var(--ink-faint); }
 #enquiry-status[data-state="busy"]  { color: var(--ink-soft); }

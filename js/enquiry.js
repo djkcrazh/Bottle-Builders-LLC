@@ -1,13 +1,14 @@
-/* Contact sheet (A-04) enquiry form, backed by Supabase.
+/* Contact sheet (A-04) enquiry form, posted to Formspree.
 
-   The form works without JavaScript and without Supabase: its action is a
-   mailto, so a visitor with either one missing still reaches us. When Supabase
-   is configured the submit is intercepted and written to public.enquiries. */
+   The form works without JavaScript and without an endpoint: its action is a
+   mailto, so a visitor with either one missing still reaches us. When an
+   endpoint is set the submit is intercepted and posted in the background, so
+   the visitor stays on the sheet and gets an answer in place. */
 
-import { SUPABASE_URL, SUPABASE_ANON_KEY, isConfigured } from "./supabase-config.js";
+import { FORM_ENDPOINT, isConfigured } from "./form-config.js";
 
 const form = document.getElementById("enquiry-form");
-if (form) {
+if (form && isConfigured) {
   const status = document.getElementById("enquiry-status");
   const submit = form.querySelector('[type="submit"]');
 
@@ -16,57 +17,51 @@ if (form) {
     status.dataset.state = state;
   };
 
-  if (!isConfigured) {
-    // Leave the mailto fallback in charge, silently. It said so in the interface
-    // until launch, but that note was a message to whoever was building the site
-    // and there is no version of it worth showing a visitor: either the form
-    // posts here, or it opens their email app, and both are ordinary outcomes.
-  } else {
-    let client = null;
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-    const getClient = async () => {
-      if (client) return client;
-      const { createClient } = await import(
-        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+    if (!form.reportValidity()) return;
+
+    const data = new FormData(form);
+
+    // Anything typed into the honeypot came from a bot, since the field is
+    // hidden from people. Act as though it sent, and send nothing.
+    if (String(data.get("_gotcha") || "").trim() !== "") {
+      form.reset();
+      say("Sent. We will come back to you shortly.", "ok");
+      return;
+    }
+    data.delete("_gotcha");
+
+    const email = String(data.get("email") || "").trim();
+
+    // Subject line on the email Formspree sends, so enquiries are sortable in
+    // an inbox without opening them.
+    const interest = String(data.get("interest") || "other");
+    data.set("_subject", "Bottle Builders enquiry: " + interest);
+
+    submit.disabled = true;
+    say("Sending", "busy");
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" }
+      });
+
+      if (!response.ok) throw new Error("Formspree responded " + response.status);
+
+      form.reset();
+      say("Sent. We will come back to you at " + email + ".", "ok");
+    } catch (err) {
+      console.error("Enquiry failed", err);
+      say(
+        "That did not send. Email office@bottlebuilders.com or call +233 55 548 9350.",
+        "error"
       );
-      client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      return client;
-    };
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      if (!form.reportValidity()) return;
-
-      const data = new FormData(form);
-      const row = {
-        name: String(data.get("name") || "").trim(),
-        email: String(data.get("email") || "").trim(),
-        phone: String(data.get("phone") || "").trim() || null,
-        organisation: String(data.get("organisation") || "").trim() || null,
-        interest: String(data.get("interest") || "other"),
-        message: String(data.get("message") || "").trim()
-      };
-
-      submit.disabled = true;
-      say("Sending", "busy");
-
-      try {
-        const supabase = await getClient();
-        const { error } = await supabase.from("enquiries").insert(row);
-        if (error) throw error;
-
-        form.reset();
-        say("Sent. We will come back to you at " + row.email + ".", "ok");
-      } catch (err) {
-        console.error("Enquiry failed", err);
-        say(
-          "That did not send. Email office@bottlebuilders.com or call +233 55 548 9350.",
-          "error"
-        );
-      } finally {
-        submit.disabled = false;
-      }
-    });
-  }
+    } finally {
+      submit.disabled = false;
+    }
+  });
 }

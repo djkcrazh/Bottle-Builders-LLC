@@ -244,10 +244,9 @@ sweeps, arrow slides and the focus ring.
 | `css/notfound.css` | The not-found sheet. Loaded only by `404.html` |
 | `css/motion.css` | Polish layer, loaded everywhere, loaded last |
 | `js/site.js` | Loading sheet, nav, scroll reveal, plate build, count-up, journey staging and ride, scroll scale, title block |
-| `js/enquiry.js` | Contact form submit, ES module |
-| `js/supabase-config.js` | Supabase URL and anon key |
+| `js/enquiry.js` | Contact form submit, ES module, posts to Formspree |
+| `js/form-config.js` | The Formspree endpoint |
 | `serve.py` / `serve.sh` | Local server with Vercel-style clean URLs |
-| `supabase/` | `config.toml` and the `enquiries` migration |
 | `vercel.json` | Clean URLs, legacy redirects, cache and security headers |
 
 The loading sheet only exists on `index.html` and plays once per session, gated
@@ -298,17 +297,27 @@ the green "With Bottle Builders", with the specific condition on a line beneath.
 
 ---
 
-## Supabase
+## The contact form
 
-The contact form writes to `public.enquiries`. Row level security is on: the
-anon key can insert and cannot read back, so shipping it in the browser is fine.
+Formspree, not a database. The form posts to the endpoint in
+`js/form-config.js` and Formspree emails the submission on. There is no backend
+to this site and nothing to run.
 
-Until keys are filled into `js/supabase-config.js`, the form falls back to
-opening the visitor's email app and says so in the interface. Nothing breaks.
+The endpoint is public by design, like the mailto address in the footer. It is
+not a secret and belongs in the repo.
 
-Never put the service role key in this repo.
+Until the endpoint is filled in, the form falls back to its `mailto` action.
+That fallback is silent: it used to print a note beside the Send button telling
+whoever was building the site to add keys, which is not a sentence a visitor
+should ever read.
 
----
+A hidden `_gotcha` field traps bots. Anything in it means the submit is dropped
+and the visitor still sees the ordinary success message.
+
+Supabase was scaffolded for this and then dropped in favour of Formspree,
+because the submissions want to arrive as email rather than sit in a table
+somebody has to remember to check. The table, its row level security and the
+migration are in git history if that decision is ever reversed.
 
 ## Verification
 
@@ -336,15 +345,16 @@ Check on each of `/`, `/about`, `/team`, `/contact`, `/recycle`:
    description. Right for link previews, not ideal for search. The plan is to
    keep the shared string in `og:description` and vary only
    `meta name="description"`. The user asked to be reminded at ship time.
-2. **Supabase keys** into `js/supabase-config.js`.
+2. **Formspree endpoint** into `js/form-config.js`.
 3. **Swap the domain** from the holding page project to this one on Vercel.
-4. **The crew photo is available and not yet placed.** `IMG_2701.JPG` in the
-   photo library is the peace-sign crew shot wanted beside the Team headline.
-   `crew.jpg` is still standing in. The baled-plastic photo for the About
-   headline never arrived; `pet-bottles.jpg` stands in there.
-5. **Check the informal waste picker figure.** The card reads "Nearly 70%". It
-   previously read 64%, which looked sourced. Confirm where the number comes
-   from before launch.
+4. **The absolute URLs point at the wrong host.** Every canonical tag,
+   `og:url`, and all five `sitemap.xml` entries say `https://bottlebuilders.com`.
+   The apex 301s to `www`, so the live address is
+   `https://www.bottlebuilders.com`. They must be changed to `www` before the
+   domain moves, or the site declares a canonical that redirects.
+
+Closed, and not to be reopened: the Team headline photo stays as it is, and the
+"Nearly 70%" figure stands as written.
 
 ---
 

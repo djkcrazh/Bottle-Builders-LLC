@@ -229,6 +229,13 @@
               </div>
             </div>
 
+            <!-- Spam trap. Hidden from people and from screen readers, so only a
+                 bot filling every field will put anything in it. -->
+            <p class="visually-hidden" aria-hidden="true">
+              <label for="f-gotcha">Leave this field empty</label>
+              <input id="f-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+            </p>
+
             <div class="enquiry-foot">
               <button class="btn" type="submit">
                 Send <span class="btn-arrow" aria-hidden="true">&#8594;</span>
