@@ -17,8 +17,10 @@ if (form) {
   };
 
   if (!isConfigured) {
-    // Leave the mailto fallback in charge and say so in the interface, quietly.
-    say("Sending opens your email app. Add Supabase keys to submit here instead.", "idle");
+    // Leave the mailto fallback in charge, silently. It said so in the interface
+    // until launch, but that note was a message to whoever was building the site
+    // and there is no version of it worth showing a visitor: either the form
+    // posts here, or it opens their email app, and both are ordinary outcomes.
   } else {
     let client = null;
 
