@@ -214,28 +214,13 @@
                 <input id="f-org" name="organisation" type="text" maxlength="160" autocomplete="organization">
               </div>
               <div class="field wide">
-                <label class="anno" for="f-interest">Subject</label>
-                <select id="f-interest" name="interest" required>
-                  <option value="collect">Collect with us, I have plastic to hand over</option>
-                  <option value="build">Build with us, I want blocks or recycled material</option>
-                  <option value="join">Join the crew, I want to work with you</option>
-                  <option value="other">Something else, I will write my own</option>
-                </select>
-              </div>
-
-              <!-- Revealed only when the menu is set to Something else. It is
-                   marked required at the same moment, never while hidden: a
-                   required field that cannot be focused blocks submit with an
-                   error the visitor can neither see nor fix. -->
-              <div class="field wide" id="f-subject-wrap" hidden>
-                <label class="anno" for="f-subject">Your subject</label>
-                <input id="f-subject" name="subject_other" type="text" maxlength="120"
-                       autocomplete="off" placeholder="Say what this is about">
+                <label class="anno" for="f-subject">Subject</label>
+                <input id="f-subject" name="subject" type="text" required maxlength="120"
+                       autocomplete="off">
               </div>
               <div class="field wide">
                 <label class="anno" for="f-message">Message</label>
-                <textarea id="f-message" name="message" required maxlength="4000"
-                          placeholder="Tell us what you have, and where you are."></textarea>
+                <textarea id="f-message" name="message" required maxlength="4000"></textarea>
               </div>
             </div>
 
