@@ -268,6 +268,20 @@
   border: var(--hair) dashed var(--ink-faint);
   background: rgba(255,255,255,0.13);
 }
+/* The partner's own mark, not the mascot: this box names who does the work
+   with us, so it carries their logo rather than our character. The source
+   file is a white square, so it gets a frame and a flat white backing rather
+   than the mascot's drop-shadow, which was tuned for a transparent character
+   silhouette and would just outline the square. */
+.partner-logo {
+  flex: none;
+  width: clamp(64px, 8vw, 88px);
+  height: clamp(64px, 8vw, 88px);
+  padding: 6px;
+  background: var(--chalk);
+  border: var(--hair) solid var(--ink-faint);
+  object-fit: contain;
+}
 .partner-body { flex: 1 1 320px; }
 .partner h4 { margin-bottom: 7px; }
 .partner p { font-size: 0.96rem; line-height: 1.6; color: var(--ink-soft); margin: 0; }
