@@ -175,7 +175,11 @@ strip down the left holds the scroll scale and nothing else.
 - **Crumpled paper**, generated from an SVG turbulence filter as a data URI. No
   image download. Blended with `multiply` so creases darken without bleaching
   the blue. `soft-light` was invisible and `overlay` washed it out
-- **Scroll scale** down the left gutter, filling white as you read
+- **Scroll scale** down the left gutter: a drafting rule stood on its end, with
+  an inked outline, graduations up the face and a bead riding the boundary
+  between read and unread. White still means read. Same hard offset shadow as
+  the buttons. Its clearance to the sheet frame is 16px, so widening it again
+  means rechecking `left` at 901px, the tightest gutter
 
 ---
 

@@ -25,6 +25,7 @@ Any static server works. There is nothing to compile.
 | `css/blueprint.css` | The design system: colour, type, sheet frame, title block, dimension lines, cyanotype plates, buttons |
 | `css/components.css` | Page pieces: hero, team roster, contact form, GREENCO card |
 | `css/journey.css` | The journey on Sheet A-02, loaded only by that page |
+| `css/notfound.css` | The not-found sheet, loaded only by `404.html` |
 | `css/motion.css` | Polish layer: staggered reveals and hover states. Purely additive |
 | `js/site.js` | Loading sheet, navigation, scroll reveal, count-up, journey staging |
 | `js/enquiry.js` | Contact form submit, posted to Formspree |
@@ -44,6 +45,13 @@ every drafting annotation, dimension label and sheet number.
 **Photography.** Photos print as cyanotype plates and return to full colour when
 you hover, or shortly after they scroll into view. That is the drawn to built
 idea, and it is why `.plate` uses blend modes rather than a filter alone.
+
+**The scroll scale.** A drafting rule stood on its end in the left gutter:
+white body, inked outline, graduations up the face, and a bead riding the
+boundary between read and unread. White still means read. It carries the same
+hard offset shadow as the buttons, and it is hidden below 901px where there is
+no gutter to hold it. Clearance to the sheet frame is 16px and holds at every
+desktop width.
 
 **The journey (Sheet A-02).** One bottle travels down a drawn spine. At each of
 three phases the path forks: the left branch dead-ends and gets stamped, the
@@ -106,8 +114,9 @@ They arrive as email. The subject line carries what the sender picked in the
 
 ## Hosting: Vercel
 
-Supabase does not host static sites, so the pages are served separately. The
-front end is hosted on Vercel, configured by `vercel.json`.
+These are static files with nothing to run, so they are served straight from
+Vercel, configured by `vercel.json`. The contact form is the only thing that
+talks to anywhere else, and it talks to Formspree from the browser.
 
 There is **no build step**. Vercel serves this directory as static files.
 
