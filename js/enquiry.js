@@ -8,6 +8,31 @@
 import { FORM_ENDPOINT, isConfigured } from "./form-config.js";
 
 const form = document.getElementById("enquiry-form");
+
+/* Custom subject. This runs whether or not an endpoint is configured, because
+   the mailto fallback carries the field too and the menu has to behave the
+   same either way. */
+if (form) {
+  const interest = form.querySelector("#f-interest");
+  const wrap = form.querySelector("#f-subject-wrap");
+  const custom = form.querySelector("#f-subject");
+
+  if (interest && wrap && custom) {
+    const sync = () => {
+      const writingTheirOwn = interest.value === "other";
+      wrap.hidden = !writingTheirOwn;
+      // Required only while visible. A required field that cannot be focused
+      // blocks submit with an error nobody can see.
+      custom.required = writingTheirOwn;
+      if (!writingTheirOwn) custom.value = "";
+    };
+
+    interest.addEventListener("change", sync);
+    // Runs once on load so a value restored by the browser is honoured.
+    sync();
+  }
+}
+
 if (form && isConfigured) {
   const status = document.getElementById("enquiry-status");
   const submit = form.querySelector('[type="submit"]');
@@ -36,9 +61,14 @@ if (form && isConfigured) {
     const email = String(data.get("email") || "").trim();
 
     // Subject line on the email Formspree sends, so enquiries are sortable in
-    // an inbox without opening them.
-    const interest = String(data.get("interest") || "other");
-    data.set("_subject", "Bottle Builders enquiry: " + interest);
+    // an inbox without opening them. The prefix stays whatever the sender
+    // chose, so a custom subject is still recognisable at a glance.
+    const chosen = String(data.get("interest") || "other");
+    const written = String(data.get("subject_other") || "").trim();
+    const subject = chosen === "other" && written ? written : chosen;
+    data.set("_subject", "Bottle Builders enquiry: " + subject);
+    // Folded into the subject line, so it would only repeat in the body.
+    data.delete("subject_other");
 
     submit.disabled = true;
     say("Sending", "busy");
