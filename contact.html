@@ -225,10 +225,19 @@
             </div>
 
             <!-- Spam trap. Hidden from people and from screen readers, so only a
-                 bot filling every field will put anything in it. -->
+                 bot filling every field will put anything in it.
+
+                 It carries no label on purpose. aria-hidden keeps it out of the
+                 accessibility tree, and a label is the one thing that would
+                 announce the trap by name if that attribute were ever lost.
+                 aria-hidden sits on the input as well as the wrapper so a single
+                 edit cannot expose it.
+
+                 The class clips it rather than setting display:none, which is
+                 the state bots know to skip. -->
             <p class="visually-hidden" aria-hidden="true">
-              <label for="f-gotcha">Leave this field empty</label>
-              <input id="f-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+              <input id="f-gotcha" name="_gotcha" type="text" tabindex="-1"
+                     autocomplete="off" aria-hidden="true">
             </p>
 
             <div class="enquiry-foot">

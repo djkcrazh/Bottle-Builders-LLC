@@ -43,8 +43,28 @@ if (form && isConfigured) {
     if (field) field.addEventListener("input", () => field.setCustomValidity(""));
   });
 
+  /* Native validation runs before the submit event, so a click on a form with
+     an empty field is rejected by the browser and the submit handler never
+     runs. Clearing the status there alone would leave a network error from a
+     previous attempt on screen while the visitor is being shown a validation
+     bubble about something else entirely. The invalid event is the only signal
+     that path gives us. It does not bubble, so this listens in the capture
+     phase. */
+  form.addEventListener("invalid", () => say("", "idle"), true);
+
+  // The button is disabled synchronously below, so a second click cannot reach
+  // it and no visitor path produces two requests today. This closes the class
+  // anyway, including submits raised in code rather than by a click.
+  let submitting = false;
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (submitting) return;
+
+    // A network error from a previous attempt must not sit on screen while the
+    // problem in front of the visitor is an empty field.
+    say("", "idle");
 
     gradeBlanks();
     if (!form.reportValidity()) return;
@@ -75,6 +95,7 @@ if (form && isConfigured) {
     data.set("_subject", "Bottle Builders enquiry: " + written);
     data.delete("subject");
 
+    submitting = true;
     submit.disabled = true;
     say("Sending", "busy");
 
@@ -96,7 +117,15 @@ if (form && isConfigured) {
         "error"
       );
     } finally {
+      submitting = false;
       submit.disabled = false;
+      // Disabling a focused button drops focus to <body>, which sends a keyboard
+      // visitor back to the top of the document. Put it back where they left it,
+      // and only then, so focus is never taken from somewhere they moved to
+      // while the request was in flight. The status paragraph is not the target:
+      // it is already role="status" aria-live="polite", so it announces on its
+      // own, and moving focus onto it would take focus to say so.
+      if (document.activeElement === document.body) submit.focus();
     }
   });
 }

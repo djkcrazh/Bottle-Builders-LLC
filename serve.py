@@ -37,6 +37,15 @@ class CleanURLHandler(SimpleHTTPRequestHandler):
 
         return local
 
+    def end_headers(self):
+        # SimpleHTTPRequestHandler sends Last-Modified and nothing else, which
+        # lets a browser cache heuristically and serve a stale stylesheet or a
+        # stale ES module while you debug the fresh one. That has cost real time
+        # more than once. Nothing here is worth caching: the whole point of this
+        # server is to show what is on disk right now.
+        self.send_header("Cache-Control", "no-store, must-revalidate")
+        super().end_headers()
+
     def send_error(self, code, message=None, explain=None):
         # Serve the branded 404 page, keeping the 404 status.
         page = os.path.join(ROOT, "404.html")
