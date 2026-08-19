@@ -738,37 +738,74 @@ strong { font-weight: 700; }
 @media (min-width: 901px) {
   :root { --gutter: 52px; }
 
+  /* A drafting rule stood on its end: white body, inked outline, graduations
+     up the face, and a bead that rides down it as the sheet is read. Drawn
+     chunky on purpose, with the same hard offset shadow the buttons carry, so
+     it reads as an object sitting on the paper rather than a browser chrome
+     progress bar. */
   .progress {
     display: block;
     position: fixed;
-    /* Sits in the gutter, clear of the frame line to its right. */
-    left: calc(var(--margin) + var(--gutter) - 18px);
+    /* Sits in the gutter, clear of the frame line to its right. The width
+       below plus its border and shadow has to stay inside --gutter. */
+    left: calc(var(--margin) + var(--gutter) - 34px);
     top: calc(var(--nav-h) + var(--margin));
     bottom: var(--margin);
-    width: 4px;
+    width: 15px;
     z-index: 35;
     pointer-events: none;
-    background: rgba(13, 46, 76, 0.12);
+    background: rgba(255, 255, 255, 0.42);
+    border: 2px solid var(--ink);
+    /* Slightly uneven radii: the rule looks drawn by hand rather than set. */
+    border-radius: 10px 9px 10px 9px / 12px 11px 12px 11px;
+    box-shadow: 3px 3px 0 var(--ink);
   }
 
-  /* Empty track that fills with white as the sheet is read, so a full sheet
-     reads as a solid reproduction line rather than a bar of ink. */
+  /* Fills solid white as the sheet is read, so a finished sheet reads as a
+     complete reproduction line rather than a bar of ink. */
   .progress i {
     display: block;
+    position: relative;
     width: 100%;
     height: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.45),
-      var(--chalk)
-    );
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.55);
+    background: var(--chalk);
+    border-radius: 8px 7px 8px 7px / 10px 9px 10px 9px;
     transition: height 0.1s linear;
+  }
+
+  /* The bead. It rides the boundary between read and unread. */
+  .progress i::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 17px;
+    height: 17px;
+    margin-left: -8.5px;
+    box-sizing: border-box;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--hardhat);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  /* Graduations, laid over the fill so they stay legible on both halves. */
+  .progress::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0 22px,
+      rgba(13, 46, 76, 0.42) 22px 24px
+    );
   }
 
   .progress span {
     position: absolute;
-    right: 16px;
+    right: 26px;
     bottom: 0;
     font-family: var(--mono);
     font-size: 0.55rem;
