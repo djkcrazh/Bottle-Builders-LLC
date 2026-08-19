@@ -11,6 +11,6 @@
    While this is left as a placeholder the form falls back to opening the
    visitor's email app, which is what it does today. Nothing breaks. */
 
-export const FORM_ENDPOINT = "https://formspree.io/f/YOUR-FORM-ID";
+export const FORM_ENDPOINT = "https://formspree.io/f/xjybjwoy";
 
 export const isConfigured = !FORM_ENDPOINT.includes("YOUR-FORM-ID");
