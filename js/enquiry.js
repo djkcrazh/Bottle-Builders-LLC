@@ -17,12 +17,45 @@ if (form && isConfigured) {
     status.dataset.state = state;
   };
 
+  /* The four fields a visitor has to fill in. Native `required` only checks
+     that a field is not empty, so a run of spaces satisfies it and an enquiry
+     of pure whitespace used to send. Checking the trimmed value closes that,
+     and setCustomValidity means the browser raises it on the offending field
+     in its own voice, in the visitor's own language, exactly as it does for a
+     genuinely empty one. */
+  const mustHaveContent = ["name", "email", "subject", "message"];
+
+  const gradeBlanks = () => {
+    mustHaveContent.forEach((fieldName) => {
+      const field = form.elements[fieldName];
+      if (!field) return;
+      const blank = field.value.trim() === "";
+      // Clearing the custom error leaves native checks intact, so a malformed
+      // address still reports as a malformed address rather than as blank.
+      field.setCustomValidity(blank ? "Please fill out this field." : "");
+    });
+  };
+
+  // Clear a custom error as soon as the visitor types, so a message raised on
+  // the last attempt cannot outlive the problem it described.
+  mustHaveContent.forEach((fieldName) => {
+    const field = form.elements[fieldName];
+    if (field) field.addEventListener("input", () => field.setCustomValidity(""));
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    gradeBlanks();
     if (!form.reportValidity()) return;
 
     const data = new FormData(form);
+
+    // Send what they meant, not the spaces around it.
+    mustHaveContent.forEach((fieldName) => {
+      const value = data.get(fieldName);
+      if (typeof value === "string") data.set(fieldName, value.trim());
+    });
 
     // Anything typed into the honeypot came from a bot, since the field is
     // hidden from people. Act as though it sent, and send nothing.
