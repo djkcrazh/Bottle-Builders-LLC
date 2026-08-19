@@ -32,6 +32,12 @@ the site folder.
 **Verify visually, do not assume.** Every change gets checked in a browser at
 1440x900 and 390x844 before being called done. See "Verification" below.
 
+**Nothing fixed-size around text.** A browser's minimum font size setting
+clamps computed type without changing the viewport, so `clamp()` cannot hold
+the line and anything that will not shrink walks off the sheet. Everything that
+used to do this has been fixed: see "Type that grows" below. New components
+must not reintroduce it.
+
 ---
 
 ## Where everything lives
@@ -328,6 +334,43 @@ Supabase was scaffolded for this and then dropped in favour of Formspree,
 because the submissions want to arrive as email rather than sit in a table
 somebody has to remember to check. The table, its row level security and the
 migration are in git history if that decision is ever reversed.
+
+## Type that grows
+
+A visitor can raise the browser's minimum font size, which clamps computed type
+without touching the viewport. `clamp()` gives no protection. Four things broke
+under it and are now guarded, so do not undo them:
+
+- `.dim-label` shrinks and wraps. It was `flex: none`, which sent the home page
+  1.3 times past the viewport at a 20px floor. `min-width: 0` is the load
+  bearing part: a flex item defaults to `min-width: auto` and will not shrink
+  below its content whatever `flex-shrink` says.
+- `overflow-wrap: anywhere`, not `break-word`, on the dimension label, footer
+  links and the title block. Only `anywhere` reduces an element's min content
+  width, which is what actually stops the overflow. `break-word` looks like it
+  works and does not.
+- `.titleblock` uses `minmax(0, 1fr)` on phones. Plain `1fr` refuses to shrink
+  below its content and walked the block off screen.
+- `.bcard-stamp` scales from `100% 0`. It starts at `scale(1.4)` while still at
+  `opacity: 0`, and scaling from the centre pushed an invisible box past the
+  sheet edge, widening the document for no visible reason.
+
+To test, raise the floor from the page rather than hunting for a browser
+setting: walk the DOM, and where computed `font-size` is below the floor, set
+it to the floor. That mutates the live page and nothing on disk, and a reload
+undoes it. CDP cannot emulate this setting, which is not a reason to skip it.
+
+Clean at 16px and 20px on every sheet at 1440x900 and 390x844. At 24px, the
+browser maximum, the home and team sheets run 9px and 1px past on a phone,
+clipped invisibly by `body { overflow-x: hidden }`. Chasing that last stretch
+means changing letter spacing on buttons for everyone, so it is left knowingly.
+
+One known overlap: with the floor raised, the docked title block covers rows of
+the 404 sheet index at rest. The page becomes scrollable at that point and the
+block steps aside on scroll, so every link stays reachable. This is how the
+block behaves on every other sheet and is accepted.
+
+---
 
 ## Verification
 

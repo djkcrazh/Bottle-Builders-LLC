@@ -241,6 +241,13 @@
 .bcard-stamp {
   position: absolute;
   top: 14px; right: 14px;
+  /* Absolutely positioned and rotated, so it grows out of the card rather than
+     reflowing it. Capped against the card, and scaled from its own anchored
+     corner so the 1.4 it starts at grows inward. Scaling from the centre pushed
+     it past the right edge of the sheet, which is invisible at rest because it
+     is also at opacity 0, but still widened the document. */
+  max-width: calc(100% - 28px);
+  transform-origin: 100% 0;
   z-index: 2;
   opacity: 0;
   transform: rotate(-5deg) scale(1.4);

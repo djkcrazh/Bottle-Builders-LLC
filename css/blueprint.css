@@ -349,7 +349,10 @@ strong { font-weight: 700; }
   bottom: var(--margin);
   z-index: 30;
   display: grid;
-  grid-template-columns: repeat(4, minmax(74px, auto));
+  grid-template-columns: repeat(4, minmax(0, auto));
+  /* Never wider than the sheet. Fixed to the corner, so overflow here leaves
+     the viewport instead of pushing anything. */
+  max-width: calc(100vw - (var(--margin) * 2));
   /* Fully opaque. A translucent panel lets copy show through it, which reads
      as two pieces of text sitting on top of each other. */
   background: var(--sheet);
@@ -365,7 +368,7 @@ strong { font-weight: 700; }
 }
 .titleblock div:last-child { border-right: 0; }
 .titleblock dt { margin: 0 0 3px; font-size: 0.53rem; letter-spacing: 0.2em; color: var(--ink-faint); }
-.titleblock dd { margin: 0; font-family: var(--mono); font-size: 0.76rem; font-weight: 600; letter-spacing: 0.05em; }
+.titleblock dd { margin: 0; font-family: var(--mono); font-size: 0.76rem; font-weight: 600; letter-spacing: 0.05em; overflow-wrap: anywhere; }
 
 /* --- 6. Drafting primitives --------------------------------------------- */
 
@@ -406,7 +409,18 @@ strong { font-weight: 700; }
 }
 .dim-line::before { left: 0;  border-right: 8px solid var(--ink); }
 .dim-line::after  { right: 0; border-left:  8px solid var(--ink); }
-.dim-label { flex: none; }
+/* The label may shrink and wrap. It used to be flex: none, which told it never
+   to give ground, so a long label pushed straight past the edge of the sheet
+   and off the viewport. That is invisible at the sizes we set, and obvious the
+   moment a visitor raises the browser's minimum font size, which clamps
+   computed type without changing the viewport. min-width:0 is the part that
+   actually does the work: a flex item defaults to min-width:auto and will not
+   shrink below its content no matter what flex-shrink says. */
+.dim-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 
 /* Leader line with a circled callout, used to point at things. */
 .callout {
@@ -535,6 +549,11 @@ strong { font-weight: 700; }
   background: var(--hardhat);
   color: var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
+  /* The label and its arrow are flex items, so without this they stay on one
+     line at any size and set a floor the column cannot shrink below. Never
+     triggers at the sizes we set; it only matters once the type floor is
+     raised past what a phone can fit. */
+  flex-wrap: wrap;
   transition: transform 0.16s var(--ease), box-shadow 0.16s var(--ease);
   cursor: pointer;
 }
@@ -841,7 +860,11 @@ strong { font-weight: 700; }
 }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-.foot-links { display: flex; flex-wrap: wrap; gap: 18px; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 18px; min-width: 0; }
+/* office@bottlebuilders.com is a single token with nowhere to break. At the
+   sizes we set it fits; raise the browser's minimum font size and it walks off
+   the page unless it is allowed to break mid-word. */
+.foot a { overflow-wrap: anywhere; }
 
 /* --- 15. Responsive ------------------------------------------------------ */
 
@@ -875,7 +898,10 @@ strong { font-weight: 700; }
      the page, where a real drawing puts it. */
   .titleblock {
     position: static;
-    grid-template-columns: repeat(4, 1fr);
+    /* minmax(0, 1fr), not 1fr. A grid track defaults to a minimum of its
+       content, so plain 1fr refuses to shrink and the block walks off the
+       screen once the type grows. */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     margin: 0 var(--margin) var(--margin);
     border: var(--hair) solid var(--chalk-soft);
     background: rgba(255,255,255,0.2);
