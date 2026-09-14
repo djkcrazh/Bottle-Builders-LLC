@@ -498,12 +498,21 @@ Check on each of `/`, `/about`, `/team`, `/contact`, `/recycle`:
 
 ## Open items for launch
 
-1. **Per-page meta descriptions.** All five pages currently share one
-   description. Right for link previews, not ideal for search. The plan is to
-   keep the shared string in `og:description` and vary only
-   `meta name="description"`. The user asked to be reminded at ship time.
-2. **Formspree endpoint** into `js/form-config.js`.
-3. **Swap the domain** from the holding page project to this one on Vercel.
+1. **Swap the domain** from the holding page project to this one on Vercel.
+   This is the only item left.
+
+Done, and not to be re-listed as open:
+
+- **Per-page meta descriptions.** Each sheet has its own
+  `meta name="description"`, and `og:description` still carries the shared
+  string for link previews. Commits `875d151` and `498e761`.
+- **Formspree endpoint.** Live in `js/form-config.js` since commit `56a98bd`.
+  It is `https://formspree.io/f/xjybjwoy`, and it is a public endpoint by
+  design, like the mailto in the footer. Verified working after the Atelier
+  theme: the form posts to it, trims its values, drops `_gotcha` and prefixes
+  `_subject`. **This list said it was still a placeholder long after it was
+  filled in, and that misled a later session. Check the file before repeating
+  anything here.**
 
 Closed, and not to be reopened: the Team headline photo stays as it is, the
 "Nearly 70%" figure stands as written, and the sheet frame and registration
