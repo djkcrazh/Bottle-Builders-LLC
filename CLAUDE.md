@@ -40,6 +40,68 @@ must not reintroduce it.
 
 ---
 
+## The Atelier theme
+
+The site used to print as a cyanotype: navy ink on blue paper, a drawn sheet
+border, hard offset shadows. It now prints on **white paper over a live
+canvas grid**, with floating glass panels and one soft radius. The drafting
+language survives as annotation, dimension line, title block and sheet number.
+
+It is an **override layer, not a fork**. Three files carry the whole theme:
+
+| File | Holds |
+| --- | --- |
+| `css/atelier.css` | The override layer. Loaded last on all six pages, after `motion.css` |
+| `js/kinetic-grid.js` | The canvas grid. One preset, no dependencies, no build step |
+| `js/atelier.js` | Mounts the grid, tilts the glass cards, idles the mascot |
+
+`blueprint.css` and `components.css` still hold the system. To revert, delete
+those three files and the three lines each page adds: the `atelier.css` link,
+the `<canvas id="grid">`, and the two script tags. The site returns to the
+blue sheet exactly as it was.
+
+**The single largest lever is the reproduction line.** It was white on blue
+paper (`--chalk-soft`, `--chalk-faint`). On white paper it has to become ink,
+or every border, fold line and card division on the site disappears at once.
+`css/atelier.css` redefines those two tokens to navy alphas. `--chalk` itself
+stays white: it is the text colour inside the navy blocks (the GREENCO card,
+band captions) and flipping it would make those unreadable.
+
+### The grid
+
+Ported from a React component to vanilla JS and recoloured. It does two
+things: an ambient **lean** away from the pointer, and a **ripple** on click.
+
+The lean is deliberately tiny. The source shipped `maxWarp: 30`, which dragged
+the webbing behind the cursor and competed with the copy. It went to 9, then
+to **4**, which is about as far as it can go and still answer the pointer. The
+ripple is the reaction; the lean is only the ambient motion underneath it. If
+the background ever feels dead, raise `influence` before raising `maxWarp`.
+
+Every number lives in the `PRESETS.atelier` table at the top of the file, not
+scattered through the draw loop. The grid draws one static frame and stops
+under `prefers-reduced-motion`.
+
+### What came off
+
+- **The sheet frame and the registration marks.** On blue paper they framed
+  the drawing. On white they fence in panels that are already floating.
+- **Hard offset shadows** on buttons, the contact card and the scroll scale.
+  Everything floats on a soft shadow now. The journey still carries the old
+  stamped-ink shadows, because the journey was left alone on purpose.
+- **The two column hero.** Sheets A-01 to A-04 centre their copy and drop the
+  photograph below it as a wide 16:9 plate. A-05 keeps its two columns,
+  because the GREENCO card *is* the second column.
+
+### What the journey kept
+
+`/about` Detail 01 got **chrome only**: radius on the cards and plates, and
+the glass treatment on the surrounding page. The spine, the rider, the forks,
+the stamps and the rust linework are untouched. Restyling the drawing itself
+is a separate decision and has not been made.
+
+---
+
 ## Where everything lives
 
 | | |
@@ -125,13 +187,15 @@ Defined in `css/blueprint.css` `:root`.
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--sheet` | `#b9d4ea` | The cyanotype paper |
-| `--sheet-deep` | `#9cc0de` | Inset panels, unbuilt ground |
-| `--sheet-pale` | `#d3e5f4` | Built panels |
+| `--sheet` | `#ffffff` | The paper. Was `#b9d4ea` before Atelier |
+| `--sheet-deep` | `#e7f0f8` | Inset panels, unbuilt ground |
+| `--sheet-pale` | `#f6fafd` | Built panels |
 | `--ink` | `#0d2e4c` | Navy drafting ink, all body text |
 | `--ink-soft` | `#21456c` | Secondary copy |
 | `--ink-faint` | `rgba(13,46,76,.58)` | Annotations and labels |
-| `--chalk` | `#ffffff` | White reproduction lines |
+| `--chalk` | `#ffffff` | Text inside the navy blocks. **Stays white** |
+| `--chalk-soft` | `rgba(13,46,76,.20)` | The reproduction line, re-inked |
+| `--chalk-faint` | `rgba(13,46,76,.09)` | The fainter reproduction line |
 | `--hardhat` | `#f5b417` | The only action colour. Buttons, focus, accents |
 | `--rust` | `#a63d23` | **Semantic only.** "Without Bottle Builders" |
 | `--growth` | `#1f7a4c` | **Semantic only.** "With Bottle Builders" |
@@ -157,6 +221,9 @@ Three families, each with one job.
 | `--margin` | `clamp(14px, 2.2vw, 34px)`, paper edge |
 | `--gutter` | `52px` above 901px, `0` below. Binding edge holding the scroll scale |
 | `--unit` / `--major` | `24px` / `120px` grid |
+| `--r` / `--r-sm` | `18px` / `10px`. The one radius, used everywhere or nowhere |
+| `--glass` | `rgba(255,255,255,.66)`, every floating panel |
+| `--lift` / `--lift-high` | The soft shadow at rest and on hover |
 
 The sheet frame, registration marks and nav all start after `--gutter`, so the
 strip down the left holds the scroll scale and nothing else.
@@ -164,23 +231,32 @@ strip down the left holds the scroll scale and nothing else.
 ### Breakpoints
 
 - **901px** gutter and scroll scale appear
-- **900px** nav collapses to a hamburger, title block goes into page flow
+- **900px** nav collapses to a hamburger and the floating pill becomes a full
+  width bar, title block goes into page flow
 - **860px** journey drops to one column, spine moves to the left margin
 - **760px** comparison cards stack
 - **580px height** holding page compresses for landscape phones
 
 ### Signature devices
 
+- **The kinetic grid.** A fixed canvas behind everything, leaning away from
+  the pointer and rippling on click. It replaced the printed grid lines, the
+  crumpled paper filter and the paper tooth gradient, all of which existed to
+  stop flat blue reading as a CSS fill
 - **Dimension lines** that measure quantities, not lengths. Under the home
   headline where a drawing would annotate a span, the label reads "Tackling the
   global waste crisis"
 - **Title block** docked bottom right with SHEET / TITLE / SCALE / REV. It steps
-  aside while scrolling so nothing reads underneath it
+  aside while scrolling so nothing reads underneath it. Frosted glass now
+- **The hardhat rule.** Every sheet's opening heading drafts in line by line,
+  and a yellow rule draws under the last line. The rule is `width: fit-content`
+  so it hugs the words: `.ln > i` is a block and would otherwise run the rule
+  the full width of the column on the left aligned sheets
 - **Cyanotype plates.** Photos print blue and return to full colour on hover or
   shortly after scrolling into view. Drawn becoming built
-- **Crumpled paper**, generated from an SVG turbulence filter as a data URI. No
-  image download. Blended with `multiply` so creases darken without bleaching
-  the blue. `soft-light` was invisible and `overlay` washed it out
+- **Crumpled paper**, generated from an SVG turbulence filter as a data URI.
+  Still defined in `blueprint.css` but **not drawn under Atelier**: the canvas
+  is the paper now. It returns the moment `atelier.css` is removed
 - **Scroll scale** down the left gutter: a drafting rule stood on its end, with
   an inked outline, graduations up the face and a bead riding the boundary
   between read and unread. White still means read. Same hard offset shadow as
@@ -238,14 +314,21 @@ these two, not your CSS.
 In `css/motion.css`, and this rule matters:
 
 - **No photograph inside** (`.card`, `.process-step`, `.pillar`, `.stat`,
-  `.jrn-product`, `.cta-band`, `.partner`): lift on a `transform`
+  `.jrn-product`, `.cta-band`, `.partner`): lift on a `transform`. These are
+  also the only elements `js/atelier.js` tilts toward the pointer
 - **Holds a photographic plate** (`.member`, `.bcard`, `.elevation-frame`,
   `.band`): lift with shadow and border only, never a transform
 
+`.elevation-frame` briefly carried a scroll driven `scale()` during the
+Atelier build. It looked fine in Chromium, which is exactly why the rule is
+worth restating: it is on the never-transform list, and the photograph inside
+it is the one that would fail. It was removed, and `js/atelier.js` carries a
+comment saying so. Do not add one back.
+
 Keep new components on the right side of that line.
 
-`css/motion.css` is purely additive. Delete it and the site still works, just
-flatter. It holds staggered reveals, heading assembly, hover lifts, underline
+`css/motion.css` and `js/atelier.js` are both purely additive. Delete either
+and the site still works, just flatter or stiller. It holds staggered reveals, heading assembly, hover lifts, underline
 sweeps, arrow slides and the focus ring.
 
 ---
@@ -258,8 +341,11 @@ sweeps, arrow slides and the focus ring.
 | `css/components.css` | Page pieces: hero, team roster, contact form, GREENCO card, process strip |
 | `css/journey.css` | The journey. Loaded only by `about.html` |
 | `css/notfound.css` | The not-found sheet. Loaded only by `404.html` |
-| `css/motion.css` | Polish layer, loaded everywhere, loaded last |
+| `css/motion.css` | Polish layer, loaded everywhere |
+| `css/atelier.css` | The Atelier override layer. Loaded everywhere, loaded **last** |
 | `js/site.js` | Loading sheet, nav, scroll reveal, plate build, count-up, journey staging and ride, scroll scale, title block |
+| `js/kinetic-grid.js` | The canvas grid. All tuning lives in its `PRESETS` table |
+| `js/atelier.js` | Mounts the grid, tilts the glass cards, idles the mascot |
 | `js/enquiry.js` | Contact form submit, ES module, posts to Formspree |
 | `js/form-config.js` | The Formspree endpoint |
 | `serve.py` / `serve.sh` | Local server with Vercel-style clean URLs |
@@ -303,6 +389,10 @@ Bottle Builders Ghana LTD.
 portrait link carries `aria-hidden="true"` and `tabindex="-1"` so screen readers
 and keyboard users get one link per card, not two. The visible "LinkedIn" text
 row was removed on request.
+
+**The GREENCO card carries no "Opens greenco1.web.app" line.** It was removed
+on request. The card is still an external link and still says "Open the app",
+so do not reinstate the annotation as an accessibility fix.
 
 **Every red box states "Without Bottle Builders"** as its primary tag, mirroring
 the green "With Bottle Builders", with the specific condition on a line beneath.
@@ -360,10 +450,21 @@ setting: walk the DOM, and where computed `font-size` is below the floor, set
 it to the floor. That mutates the live page and nothing on disk, and a reload
 undoes it. CDP cannot emulate this setting, which is not a reason to skip it.
 
-Clean at 16px and 20px on every sheet at 1440x900 and 390x844. At 24px, the
-browser maximum, the home and team sheets run 9px and 1px past on a phone,
-clipped invisibly by `body { overflow-x: hidden }`. Chasing that last stretch
-means changing letter spacing on buttons for everyone, so it is left knowingly.
+**Clean at 16px, 20px and 24px** on every sheet at 1440x900 and 390x844. The
+24px column used to run 9px past on home and 1px on team. Atelier first made
+that worse, because centring the hero and boxing the stat rack took away the
+slack those labels used to spread into, and then fixed it outright:
+
+```css
+.anno { overflow-wrap: anywhere; }
+.tier-head .anno, .stat-tag { min-width: 0; }
+```
+
+The two offenders were the `.stat-tag` credit line on home ("In tandem with
+partner EZOV Environmental Services") and the `.tier-head` eyebrow on team.
+Both are mono, widely letter spaced, and full of tokens with no natural break
+point. Letter spacing was never touched, which was the change the old note
+said would be needed.
 
 One known overlap: with the floor raised, the docked title block covers rows of
 the 404 sheet index at rest. The page becomes scrollable at that point and the
@@ -388,7 +489,10 @@ Check on each of `/`, `/about`, `/team`, `/contact`, `/recycle`:
 2. Console has no errors
 3. Every `assets/` reference resolves
 4. Em dash sweep is clean
-5. Photographs actually paint, especially inside the journey
+5. Photographs actually paint, especially inside the journey and in the hero
+   plate. If one renders blank, it is one of the two compositing traps above,
+   not your CSS
+6. Type growth clean at 16px, 20px and 24px floors, both widths
 
 ---
 
@@ -401,8 +505,9 @@ Check on each of `/`, `/about`, `/team`, `/contact`, `/recycle`:
 2. **Formspree endpoint** into `js/form-config.js`.
 3. **Swap the domain** from the holding page project to this one on Vercel.
 
-Closed, and not to be reopened: the Team headline photo stays as it is, and the
-"Nearly 70%" figure stands as written.
+Closed, and not to be reopened: the Team headline photo stays as it is, the
+"Nearly 70%" figure stands as written, and the sheet frame and registration
+marks stay removed under Atelier.
 
 ---
 

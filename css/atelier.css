@@ -1,0 +1,437 @@
+/* ==========================================================================
+   ATELIER
+   The sheet, restaged as an editorial spread on white paper over a live grid.
+
+   Loaded LAST on every page, after motion.css. It is an override layer, not a
+   fork: blueprint.css and components.css still hold the system, and deleting
+   this one file plus its canvas returns the site to the blue sheet exactly as
+   it was. Nothing below duplicates a rule it could inherit.
+
+   The single largest lever is in section 1: the reproduction line was white on
+   blue paper, so on white paper it has to become ink or every border, fold
+   line and card division on the site disappears at once.
+   ========================================================================== */
+
+/* --- 1. Tokens ----------------------------------------------------------- */
+
+:root {
+  /* Reproduction line, re-inked. --chalk itself stays white: it is the text
+     colour inside the navy blocks (GREENCO card, band captions) and flipping
+     it would make those unreadable. */
+  --chalk-soft:  rgba(13, 46, 76, 0.20);
+  --chalk-faint: rgba(13, 46, 76, 0.09);
+
+  --sheet:       #ffffff;
+  --sheet-deep:  #e7f0f8;
+  --sheet-pale:  #f6fafd;
+
+  /* One radius, used everywhere or nowhere. Half of it for small chrome. */
+  --r:           18px;
+  --r-sm:        10px;
+  --glass:       rgba(255, 255, 255, 0.66);
+  --glass-line:  rgba(13, 46, 76, 0.12);
+  --lift:        0 12px 34px rgba(13, 46, 76, 0.06);
+  --lift-high:   0 26px 56px rgba(13, 46, 76, 0.13);
+}
+
+/* --- 2. The paper is the canvas ------------------------------------------ */
+
+body {
+  background: transparent;
+  background-image: none;
+}
+/* The paper tooth and the crumple were tuned to keep flat blue from reading as
+   a CSS fill. The canvas does that job now. */
+body::before { display: none; }
+
+#grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* --- 3. Chrome ----------------------------------------------------------- */
+
+/* The nav lifts off the top edge and becomes a floating pill. */
+.nav {
+  top: 14px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: min(1180px, calc(100% - 2 * var(--margin)));
+  border-radius: 999px;
+  border: var(--hair) solid rgba(13, 46, 76, 0.13);
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow: 0 10px 34px rgba(13, 46, 76, 0.09);
+  padding-left: 22px;
+  padding-right: 14px;
+}
+.nav-cta { border-radius: 999px; }
+
+/* The drawn sheet border and the corner crop marks come off. On blue paper
+   they framed the drawing; on white they fence in panels that are already
+   floating, and the page reads boxed. */
+.sheet { border: 0 !important; }
+.sheet::before, .sheet::after { display: none !important; }
+.regmarks { display: none; }
+
+.titleblock {
+  border-radius: var(--r);
+  border: var(--hair) solid rgba(13, 46, 76, 0.14);
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 14px 40px rgba(13, 46, 76, 0.10);
+}
+
+/* The scroll scale keeps its drawn-rule shape but loses the hard offset
+   shadow, which was the one piece of chrome still reading as stamped ink. */
+.progress {
+  background: rgba(255, 255, 255, 0.72) !important;
+  box-shadow: 0 6px 18px rgba(13, 46, 76, 0.12) !important;
+}
+.progress i { background: rgba(13, 46, 76, 0.30) !important; }
+
+.section-mark {
+  border-radius: 50%;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--hair) solid rgba(13, 46, 76, 0.14);
+}
+
+/* --- 4. Buttons ---------------------------------------------------------- */
+
+.btn {
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(13, 46, 76, 0.16);
+}
+.btn:hover { box-shadow: 0 14px 30px rgba(13, 46, 76, 0.22); }
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.6);
+  /* An inset ring, not an offset drop: a ghost button should read as an
+     outline rather than as a second raised object. */
+  box-shadow: inset 0 0 0 var(--hair) rgba(13, 46, 76, 0.22);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 0 0 var(--hair) rgba(13, 46, 76, 0.34);
+}
+
+/* --- 5. Hero: centred editorial spread ----------------------------------- */
+
+/* Sheets A-01 to A-04 share .hero. A-05 uses .recycle and keeps its two
+   column layout, because the GREENCO card is the second column. */
+.hero {
+  display: block;
+  text-align: center;
+  padding-top: clamp(20px, 5vw, 70px);
+}
+.hero-copy { max-width: 980px; margin: 0 auto; }
+.hero h1 { font-size: clamp(3rem, 9.5vw, 9.4rem); letter-spacing: -0.02em; }
+.hero .hero-copy > h2 { font-size: clamp(2.4rem, 6.6vw, 5.6rem); letter-spacing: -0.02em; }
+.hero .lede { margin-left: auto; margin-right: auto; max-width: 56ch; }
+
+/* Annotations are mono, widely letter spaced and full of tokens with no
+   natural break point, so they are the first thing to walk off the sheet when
+   a visitor raises the browser's minimum font size. Centring the hero and
+   boxing the stat rack removed the slack they used to spread into.
+
+   anywhere, not break-word: only anywhere reduces an element's min content
+   width, which is what actually stops the overflow. break-word looks like it
+   works and does not. min-width: 0 is the load bearing half for the ones that
+   are flex items: a flex item defaults to min-width: auto and will not shrink
+   below its content whatever flex-shrink says. */
+.anno { overflow-wrap: anywhere; }
+.tier-head .anno, .stat-tag { min-width: 0; }
+.hero-actions { justify-content: center; }
+.hero .dim { justify-content: center; max-width: 620px; margin-inline: auto; }
+
+/* The elevation drops below the copy and runs wide, so the photograph reads
+   as a plate in a magazine rather than a thumbnail beside the paragraph. */
+.elevation {
+  margin: clamp(38px, 6vw, 74px) auto 0;
+  max-width: 1080px;
+}
+.elevation-frame {
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: 0 34px 90px rgba(13, 46, 76, 0.18);
+}
+/* The extension lines ran off a framed elevation. There is no frame now. */
+.elevation-frame::before, .elevation-frame::after { display: none; }
+/* Portrait source images in a 16:9 crop: bias up, where the subjects are. */
+.elevation-frame .plate img { object-position: center 38%; }
+
+/* Tags become chips laid onto the plate rather than tabs pinned outside it. */
+.elevation-tag {
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 0;
+  box-shadow: 0 4px 16px rgba(13, 46, 76, 0.16);
+}
+.elevation-tag.tl { top: 16px; left: 16px; }
+.elevation-tag.br { bottom: 16px; right: 16px; background: var(--hardhat); }
+
+/* The plate caption sits inside the frame now, so it needs the same inset. */
+.elevation-frame .plate-cap { left: 16px; bottom: 16px; }
+/* ...which is where the Built chip lives on the other side. Push the caption
+   clear of it rather than letting the two meet in the middle. */
+.elevation-frame .plate-cap { max-width: min(46ch, 52%); }
+
+/* The mascot stands at the left corner of the wide plate. On the right it
+   stood on top of the Built chip. */
+.hero-mascot {
+  bottom: -20px;
+  left: clamp(-14px, 1vw, 10px);
+  right: auto;
+  margin-right: 0;
+  z-index: 3;
+}
+
+/* --- 6. Panels ----------------------------------------------------------- */
+
+/* Everything that was a hairline-divided grid on blue paper becomes a set of
+   separate floating cards. The 1px gap that drew the division is now space. */
+.process, .stats, .roster, .pillars, .enquiry-grid { gap: 16px; }
+.process { background: none; }
+
+.process-step,
+.stat,
+.card,
+.member,
+.partner,
+.contact-card,
+.cta-band,
+.jrn-product {
+  border: var(--hair) solid var(--glass-line) !important;
+  border-radius: var(--r);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--lift);
+}
+
+.process-step { padding: clamp(20px, 2.4vw, 30px); }
+.process-step:last-child { border-right: var(--hair) solid var(--glass-line) !important; }
+.stat { padding: clamp(22px, 3vw, 36px); }
+.stat-num { font-size: clamp(2.8rem, 6vw, 5rem); }
+.cta-band { padding: clamp(26px, 4vw, 48px); box-shadow: 0 18px 50px rgba(13, 46, 76, 0.09); }
+
+/* Cards with no photograph inside lift on a transform. Cards holding a
+   photographic plate lift on shadow and border only: a transform promotes the
+   card to its own compositing layer and the filtered image inside never
+   paints. That rule predates this file and still applies. */
+.process-step,
+.card,
+.pillar,
+.jrn-product {
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.process-step:hover,
+.card:hover,
+.jrn-product:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--lift-high);
+}
+.member:hover,
+.partner:hover {
+  box-shadow: var(--lift-high);
+  border-color: rgba(13, 46, 76, 0.24) !important;
+}
+
+/* --- 7. Photographic plates and bands ------------------------------------ */
+
+.band {
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(13, 46, 76, 0.16);
+}
+.band-cap,
+.plate-cap {
+  border-radius: 999px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+  border: 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.foldline { border-color: rgba(13, 46, 76, 0.16); }
+
+/* --- 8. Team roster (Sheet A-03) ----------------------------------------- */
+
+.member { overflow: hidden; }
+/* The portrait fills the top of the card, so only the card clips it. Giving
+   the plate its own radius would double the curve. */
+.member .plate { border-bottom: 0; }
+.member:hover { background: rgba(255, 255, 255, 0.82); }
+
+/* The hover frame followed the old square portrait. It now follows the card. */
+.member-shot::after { border-radius: var(--r) var(--r) 0 0; }
+
+.partner { border-style: solid !important; padding: clamp(20px, 2.6vw, 28px); }
+.partner-logo { border-radius: var(--r-sm); border-color: var(--glass-line); }
+
+.tier-head { gap: 18px; }
+
+/* --- 9. Contact (Sheet A-04) --------------------------------------------- */
+
+.contact-card {
+  /* It carried a hard 6px offset drop, the last stamped-ink object on the
+     sheet. It floats like every other panel now. */
+  box-shadow: var(--lift) !important;
+}
+
+.pillar {
+  border: var(--hair) solid var(--glass-line);
+  border-radius: var(--r);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 18px 20px;
+}
+.pillar:first-child { border-top: var(--hair) solid var(--glass-line); }
+.pillar:hover { transform: translateY(-4px); box-shadow: var(--lift); }
+
+.contact-row { border-bottom-color: var(--glass-line); }
+
+.field input,
+.field select,
+.field textarea {
+  border-radius: var(--r-sm);
+  border-color: var(--glass-line);
+  background: rgba(255, 255, 255, 0.62);
+  padding: 12px 14px;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: rgba(13, 46, 76, 0.42);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(245, 180, 23, 0.28);
+}
+
+/* --- 10. Recycle handoff (Sheet A-05) ------------------------------------ */
+
+/* The GREENCO card stays a solid navy block: it is the one thing on the sheet
+   that is a door out to another product, and frosting it would sit it back
+   into the page. It loses the offset drop and gains the radius. */
+.greenco-card {
+  border-radius: var(--r);
+  box-shadow: 0 20px 48px rgba(13, 46, 76, 0.22);
+}
+.greenco-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 66px rgba(13, 46, 76, 0.28);
+}
+.greenco-shot { border-radius: var(--r-sm); border-color: rgba(255, 255, 255, 0.22); }
+.greenco-go { border-radius: 999px; }
+
+.steps li::before { border-radius: 50%; }
+.steps li { border-left-color: var(--glass-line); }
+
+/* --- 11. Not found (Sheet A-00) ------------------------------------------ */
+
+.nf-plate {
+  border-radius: var(--r);
+  border-color: var(--glass-line);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--lift);
+}
+.nf-index { border-radius: var(--r); overflow: hidden; }
+.nf-index li { border-bottom-color: var(--glass-line); }
+.nf-index a { border-radius: var(--r-sm); }
+
+/* --- 12. The journey (Sheet A-02, Detail 01) ----------------------------- */
+
+/* Chrome only. The spine, the rider, the forks, the stamps and the rust
+   linework are untouched: that drawing is the argument the page makes, and
+   restyling it is a separate decision. */
+.bcard { border-radius: var(--r); }
+.bcard-plate { border-radius: var(--r-sm); overflow: hidden; }
+.bcard-tag { border-radius: 999px; }
+.phase-next {
+  border-radius: 999px;
+  border-color: var(--glass-line);
+  background: rgba(255, 255, 255, 0.6);
+}
+.jrn-product { padding: clamp(16px, 2vw, 22px); }
+.jrn-start { border-radius: var(--r); }
+
+/* --- 13. Headline assembly ----------------------------------------------- */
+
+/* Each line is ruled onto the sheet bottom up, then a hardhat rule draws
+   under the last one. The wrapper clips, so the line that carries the rule
+   needs padding or the rule is cut off. */
+/* Scoped to the opening section, not to .hero: A-05 opens with .recycle and
+   A-00 with .nf-copy, and both carry a heading that wants the same treatment. */
+.section-open .ln { display: block; overflow: hidden; }
+.section-open .ln > i {
+  display: block;
+  font-style: normal;
+  transform: translateY(104%);
+  animation: atUp 1s var(--ease) forwards;
+}
+.section-open .ln:nth-child(2) > i { animation-delay: 0.09s; }
+.section-open .ln:nth-child(3) > i { animation-delay: 0.18s; }
+@keyframes atUp { to { transform: translateY(0); } }
+
+/* The wrapper clips, so the line carrying the rule needs room or it is cut. */
+.section-open .ln:last-child { padding-bottom: 0.16em; }
+/* width: fit-content, not display: inline-block. The rule has to hug the
+   words or it runs off past them on the left-aligned sheets, but an
+   inline-block child of the clipping wrapper picks up a baseline descender
+   gap and the reveal shows a sliver of the next line. Keeping it a block that
+   shrinks to its text avoids both. */
+.section-open .hot { position: relative; width: fit-content; }
+/* The home, about, team and contact heroes are centred, so the shrunk line
+   has to be re-centred inside its wrapper. */
+.hero .hot { margin-inline: auto; }
+.section-open .hot::after {
+  content: "";
+  position: absolute;
+  left: 4%; right: 4%; bottom: -0.1em;
+  height: 0.06em;
+  background: var(--hardhat);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: atRule 0.9s var(--ease) 0.75s forwards;
+}
+@keyframes atRule { to { transform: scaleX(1); } }
+
+/* The home sheet opens under the loading sheet. Hold the headline paused
+   until the loader leaves the DOM, otherwise the lines draft themselves in
+   behind it and the visitor sees only the finished state. */
+body:has(#loader) .section-open .ln > i,
+body:has(#loader) .section-open .hot::after { animation-play-state: paused; }
+
+/* --- 14. Loading sheet (Sheet A-01 only) --------------------------------- */
+
+#loader { background: #ffffff; }
+.loader-bar { background: var(--glass-line); border-radius: 999px; overflow: hidden; }
+
+/* --- 15. Responsive ------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  /* The pill would float over a phone's status area and waste the width. */
+  .nav { top: 0; border-radius: 0; width: 100%; transform: none; left: 0; right: 0; }
+  .elevation-frame { aspect-ratio: 4 / 3; }
+  .elevation-frame .plate-cap { max-width: none; }
+  /* The title block goes back into page flow on a phone, where a hard border
+     would read as a stray box. */
+  .titleblock { border-color: var(--glass-line); background: rgba(255, 255, 255, 0.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-open .ln > i, .section-open .hot::after { animation: none; transform: none; }
+}

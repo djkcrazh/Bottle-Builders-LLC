@@ -30,8 +30,12 @@
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/notfound.css">
 <link rel="stylesheet" href="css/motion.css">
+<link rel="stylesheet" href="css/atelier.css">
 </head>
 <body>
+
+<!-- The paper: a live grid that leans away from the pointer. -->
+<canvas id="grid" aria-hidden="true"></canvas>
 
 <div class="regmarks"><span></span><span></span><span></span><span></span></div>
 
@@ -87,7 +91,7 @@
         <p class="anno anno-faint reveal">Sheet A-00 &nbsp;/&nbsp; Not in the set</p>
 
         <h1 class="reveal" data-delay="60" style="margin-top:10px">
-          This sheet was<br>never drawn.
+          <span class="ln"><i>This sheet was</i></span><span class="ln"><i class="hot">never drawn.</i></span>
         </h1>
 
         <div class="dim reveal" data-delay="160">
@@ -168,5 +172,7 @@
 </dl>
 
 <script src="js/site.js"></script>
+<script src="js/kinetic-grid.js"></script>
+<script src="js/atelier.js"></script>
 </body>
 </html>

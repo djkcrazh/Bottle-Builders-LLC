@@ -29,8 +29,12 @@
 <link rel="stylesheet" href="css/blueprint.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/motion.css">
+<link rel="stylesheet" href="css/atelier.css">
 </head>
 <body>
+
+<!-- The paper: a live grid that leans away from the pointer. -->
+<canvas id="grid" aria-hidden="true"></canvas>
 
 <div class="regmarks"><span></span><span></span><span></span><span></span></div>
 <div class="progress"><i></i><span>0% of sheet</span></div>
@@ -62,7 +66,7 @@
       <div class="hero-copy">
         <p class="anno anno-faint reveal">Sheet A-04 &nbsp;/&nbsp; Contact</p>
 
-        <h2 class="reveal" data-delay="60" style="margin-top:10px">Let's build</h2>
+        <h2 class="reveal" data-delay="60" style="margin-top:10px"><span class="ln"><i class="hot">Let's build</i></span></h2>
 
         <div class="dim reveal" data-delay="160">
           <span class="dim-line"></span>
@@ -286,6 +290,8 @@
 </dl>
 
 <script src="js/site.js"></script>
+<script src="js/kinetic-grid.js"></script>
+<script src="js/atelier.js"></script>
 <script type="module" src="js/enquiry.js"></script>
 </body>
 </html>

@@ -29,8 +29,12 @@
 <link rel="stylesheet" href="css/blueprint.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/motion.css">
+<link rel="stylesheet" href="css/atelier.css">
 </head>
 <body>
+
+<!-- The paper: a live grid that leans away from the pointer. -->
+<canvas id="grid" aria-hidden="true"></canvas>
 
 <!-- Loading sheet: the drawing is made before the page is shown -->
 <div id="loader">
@@ -83,9 +87,9 @@
         <p class="anno anno-faint reveal">Sheet A-01 &nbsp;/&nbsp; Home</p>
 
         <h1 class="reveal" data-delay="60">
-          Transforming<br>
-          what waste<br>
-          can become.
+          <span class="ln"><i>Transforming</i></span>
+          <span class="ln"><i>what waste</i></span>
+          <span class="ln"><i class="hot">can become.</i></span>
         </h1>
 
         <div class="dim reveal" data-delay="180">
@@ -237,5 +241,7 @@
 </dl>
 
 <script src="js/site.js"></script>
+<script src="js/kinetic-grid.js"></script>
+<script src="js/atelier.js"></script>
 </body>
 </html>

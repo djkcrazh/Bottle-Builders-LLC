@@ -29,8 +29,12 @@
 <link rel="stylesheet" href="css/blueprint.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/motion.css">
+<link rel="stylesheet" href="css/atelier.css">
 </head>
 <body>
+
+<!-- The paper: a live grid that leans away from the pointer. -->
+<canvas id="grid" aria-hidden="true"></canvas>
 
 <div class="regmarks"><span></span><span></span><span></span><span></span></div>
 <div class="progress"><i></i><span>0% of sheet</span></div>
@@ -63,7 +67,7 @@
         <span class="anno anno-faint reveal">Sheet A-05 &nbsp;/&nbsp; Recycle!</span>
 
         <h2 class="reveal" data-delay="60" style="margin-top:12px">
-          Hand it over.<br>Get paid.
+          <span class="ln"><i>Hand it over.</i></span><span class="ln"><i class="hot">Get paid.</i></span>
         </h2>
 
         <div class="dim reveal" data-delay="160" style="max-width:420px">
@@ -84,7 +88,6 @@
       </div>
 
       <a class="greenco-card reveal" data-delay="120" href="https://greenco1.web.app/" target="_blank" rel="noopener">
-        <span class="anno">Opens greenco1.web.app</span>
         <div class="greenco-shot">
           <img src="assets/photos/greenco-icons.jpg" alt="The GREENCO app identity">
         </div>
@@ -228,5 +231,7 @@
 </dl>
 
 <script src="js/site.js"></script>
+<script src="js/kinetic-grid.js"></script>
+<script src="js/atelier.js"></script>
 </body>
 </html>
