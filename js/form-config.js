@@ -11,6 +11,10 @@
    While this is left as a placeholder the form falls back to opening the
    visitor's email app, which is what it does today. Nothing breaks. */
 
+/* This value is duplicated as the <form action> in contact.html, on purpose:
+   the form has to post somewhere secure even with JavaScript off, and an
+   action written by JS would arrive too late to stop Chrome disabling autofill.
+   If you change the endpoint, change it in both places. */
 export const FORM_ENDPOINT = "https://formspree.io/f/xjybjwoy";
 
 export const isConfigured = !FORM_ENDPOINT.includes("YOUR-FORM-ID");

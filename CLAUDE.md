@@ -412,10 +412,24 @@ to this site and nothing to run.
 The endpoint is public by design, like the mailto address in the footer. It is
 not a secret and belongs in the repo.
 
-Until the endpoint is filled in, the form falls back to its `mailto` action.
-That fallback is silent: it used to print a note beside the Send button telling
-whoever was building the site to add keys, which is not a sentence a visitor
-should ever read.
+**The form action is the Formspree endpoint, not a `mailto`.** It used to be
+`mailto:office@bottlebuilders.com`, the fallback for when the endpoint was a
+placeholder. Chrome reads a `mailto` action as a non-secure destination, turns
+autofill off for the whole form, and shows the visitor "This form is not
+secure. Autofill has been turned off." the moment they click a field. The
+endpoint has been live since `56a98bd`, so that warning was being paid for a
+fallback nothing used. `enctype="text/plain"` went with it: that exists to
+make a readable mailto body and would break a real POST.
+
+The endpoint is therefore written in two places, `contact.html` and
+`js/form-config.js`, and they have to match. An action written by JavaScript
+would arrive after Chrome has already decided about autofill, which is why it
+is static in the HTML.
+
+With JavaScript the submit is intercepted and the visitor stays on the sheet.
+Without it, the form posts to Formspree directly and lands on Formspree's own
+confirmation page. The subject line is the only thing lost on that path: JS
+rewrites it to `_subject` with a filterable prefix, and a plain POST cannot.
 
 A hidden `_gotcha` field traps bots. Anything in it means the submit is dropped
 and the visitor still sees the ordinary success message.

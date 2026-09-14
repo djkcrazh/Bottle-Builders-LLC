@@ -197,8 +197,24 @@
 
       <div class="reveal" data-delay="120">
         <div class="contact-card">
+          <!-- The action posts straight to Formspree, which is also what
+               js/enquiry.js posts to. It used to be a mailto, which was the
+               fallback for when the endpoint was still a placeholder. Chrome
+               treats a mailto action as a non-secure destination, turns
+               autofill off for the whole form, and tells the visitor "this
+               form is not secure" the moment they click a field. The endpoint
+               has been live since 56a98bd, so the fallback was costing us
+               that warning for nothing.
+
+               enctype is gone with it: text/plain exists to make a readable
+               mailto body and would break a real POST. The default
+               application/x-www-form-urlencoded is what Formspree wants.
+
+               Keep this URL identical to FORM_ENDPOINT in js/form-config.js.
+               With JS the submit is intercepted and this is never used; without
+               it, this is the whole form. -->
           <form class="enquiry" id="enquiry-form" method="post"
-                action="mailto:office@bottlebuilders.com" enctype="text/plain" style="margin-top:0">
+                action="https://formspree.io/f/xjybjwoy" style="margin-top:0">
             <span class="anno anno-faint" style="display:block;margin-bottom:14px">Write to us here</span>
 
             <div class="enquiry-grid">
