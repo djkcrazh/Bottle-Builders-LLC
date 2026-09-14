@@ -116,15 +116,28 @@ is a separate decision and has not been made.
 
 ### Current live state
 
-**`www.bottlebuilders.com` currently serves the holding page**, not this site.
+**`www.bottlebuilders.com` serves this site.** The domain swap has happened.
+Verified 2026-09-14: all five sheets return 200 with `css/atelier.css`, the
+grid canvas and `js/atelier.js` in the served HTML, and an unknown path returns
+a real 404.
+
+**A push to `main` is a public production deploy.** Vercel builds `main` through
+its GitHub integration and the result is what visitors see within about a
+minute. There is no staging step in front of it.
 
 - Domain DNS is run by **Wix** (`ns12.wixdns.net`, `ns13.wixdns.net`)
 - `www` CNAMEs to Vercel, apex 301s to `www`
 - The old Wix site is disconnected. Its URLs now 404
-- Hosting is **Vercel** for both projects
+- Hosting is **Vercel**
+- Vercel project is `crazh-s-den/bottle_builders-llc_website`. Its public alias
+  is `bottlebuilders-llcwebsite.vercel.app`
+- Deployment-specific URLs (`...-<hash>-crazh-s-den.vercel.app`) sit behind
+  Vercel Deployment Protection and 302 every path to an SSO login, including
+  paths that do not exist. Do not read that 302 as a broken deploy, and do not
+  try to verify a release through one. Check the public alias or the domain
 
-To go live with the real site: remove the domain from the holding page's Vercel
-project, add it to the `Bottle-Builders-LLC` project. No DNS change needed.
+This section used to say the domain still pointed at the holding page, which
+was false and was believed. Verify with `curl`, not with this file.
 
 Note: Vercel's Hobby plan is licensed for personal, non-commercial use. This is
 a company site. The user was told and chose Vercel anyway. Do not re-litigate.
@@ -512,10 +525,12 @@ Check on each of `/`, `/about`, `/team`, `/contact`, `/recycle`:
 
 ## Open items for launch
 
-1. **Swap the domain** from the holding page project to this one on Vercel.
-   This is the only item left.
+Nothing is blocking launch. The site is live.
 
 Done, and not to be re-listed as open:
+
+- **The domain swap.** Already done. `www.bottlebuilders.com` serves this
+  project. See "Current live state" above.
 
 - **Per-page meta descriptions.** Each sheet has its own
   `meta name="description"`, and `og:description` still carries the shared
